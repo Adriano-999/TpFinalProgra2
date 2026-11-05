@@ -1,20 +1,28 @@
 import Exception.*;
 import Model.BDD.Conexion;
+import Model.BDD.ConexionUsuario;
 import Model.Usuario;
 
 void main() {
     boolean end = false;
     int choice;
     Scanner sc = new Scanner(System.in);
-    Usuario usuario;
+    Usuario usuario = null;
     while (!end) {
-
-        System.out.println("Menu:");
-        System.out.println("1: Opcion 1");
-        System.out.println("2: Opcion 2");
-        System.out.println("3: Opcion 3");
-        System.out.println("9: Cerrar");
         try{
+            if (Objects.isNull(usuario)){
+                System.out.println("Iniciar Sesion:");
+                System.out.println("Nombre de usuario:");
+                String user = sc.nextLine();
+                System.out.println("Contrasenia:");
+                String password = sc.nextLine();
+                ConexionUsuario.ingresar(user,password);
+            }
+            System.out.println("Menu:");
+            System.out.println("1: Opcion 1");
+            System.out.println("2: Opcion 2");
+            System.out.println("3: Opcion 3");
+            System.out.println("9: Cerrar");
             try{
                 choice = sc.nextInt();
                 sc.nextLine();
