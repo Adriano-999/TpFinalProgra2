@@ -11,7 +11,7 @@ public class Conexion {
     public static Connection abrir() throws LibreriaException, PersistenciaException {
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
-            String schema = "2026_C7_Anabel_Raimondo_TP_Final_Progra";
+            String schema = "2026_C7_ _TP_Final_Progra";
             connection = DriverManager.getConnection("jdbc:mysql://172.16.1.64:3306/"+schema,"bdd1","bdd1");
             return connection;
         } catch (ClassNotFoundException e) {
