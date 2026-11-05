@@ -1,6 +1,7 @@
 package Model.BDD;
 
 import java.sql.*;
+import java.util.ArrayList;
 
 import Exception.PersistenciaException;
 import Exception.LibreriaException;
@@ -36,6 +37,37 @@ public class ConexionReserva {
             throw new PersistenciaException(4);
         }
     }
+
+
+    public static ArrayList<Reserva> buscarReservasPorPasajero(int pasajero_id) throws LibreriaException,PersistenciaException, NoEncontradoException {
+        try {
+            Connection connection = Conexion.abrir();
+            checkTabla(connection);
+            Statement st = connection.createStatement();
+            ResultSet resultSet = st.executeQuery("Select * from libros where id_pasajero="+pasajero_id+";");
+            ArrayList<Reserva> reservas = new ArrayList<>();
+            while (resultSet.next()){
+                Reserva reserva = new Reserva(
+                        resultSet.getInt("id_pasajero"),
+                        resultSet.getInt("id_habitacion"),
+                        resultSet.getDate("fecha_inicio"),
+                        resultSet.getInt("id_reserva")
+                );
+                reservas.add(reserva);
+            }
+            resultSet.close();
+            st.close();
+            Conexion.cerrar();
+            if (reservas.isEmpty()){
+                throw new NoEncontradoException();
+            } else {
+                return reservas;
+            }
+        } catch (SQLException e) {
+            throw new PersistenciaException(4);
+        }
+    }
+
 
 
     public static boolean guardarReserva(Reserva reserva) throws LibreriaException,PersistenciaException{
