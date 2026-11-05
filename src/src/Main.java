@@ -1,11 +1,14 @@
 import Exception.*;
 import Model.BDD.Conexion;
+import Model.Usuario;
 
 void main() {
     boolean end = false;
     int choice;
     Scanner sc = new Scanner(System.in);
+    Usuario usuario;
     while (!end) {
+
         System.out.println("Menu:");
         System.out.println("1: Opcion 1");
         System.out.println("2: Opcion 2");
