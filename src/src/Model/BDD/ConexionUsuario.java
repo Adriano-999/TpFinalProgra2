@@ -1,6 +1,7 @@
 package Model.BDD;
 
 import java.sql.*;
+import java.util.HashSet;
 
 import Exception.LibreriaException;
 import Exception.PersistenciaException;
@@ -20,13 +21,79 @@ public class ConexionUsuario {
             ps.setString(2, contrasenia);
             ResultSet rs = ps.executeQuery();
             if(rs.next()) {
-                Usuario u = new Usuario(rs.getString("usuario"), rs.getString("contrasenia"), TipoUsuario.valueOf(rs.getString("tipo_usuario")));
+                Usuario u = new Usuario(rs.getInt("id_usuario"), rs.getString("usuario"), rs.getString("contrasenia"), TipoUsuario.valueOf(rs.getString("tipo_usuario")));
             ps.close();
             rs.close();
             return u;}
             return null;
         }catch(SQLException e)
         {
+            throw new PersistenciaException(4);
+        }
+    }
+
+    public boolean crearUsuario(String usuario, String contrasenia, TipoUsuario tipoUsuario) throws LibreriaException, PersistenciaException
+    {
+        String query = "INSERT INTO usuarios (usuario, contrasenia, tipo_usuario) values (?,?,?)";
+        try(Connection con = Conexion.abrir())
+        {
+            checkTabla(con);
+            PreparedStatement ps = con.prepareStatement(query);
+            ps.setString(1, usuario);
+            ps.setString(2, contrasenia);
+            ps.setString(3, tipoUsuario.name());
+            ps.executeUpdate();
+                ps.close();
+                return true;
+        }catch(SQLException e)
+        {
+            throw new PersistenciaException(3);
+        }
+    }
+
+    public void eliminarUsuario(int id_usuario) throws PersistenciaException, LibreriaException
+    {
+        String query = "DELETE FROM usuarios WHERE id_usuario = ?";
+        try (Connection con = Conexion.abrir();
+             PreparedStatement ps = con.prepareStatement(query)) {
+
+            checkTabla(con);
+
+            ps.setInt(1, id_usuario);
+            ps.executeUpdate();
+
+        } catch (SQLException e) {
+            throw new PersistenciaException(3);
+        }
+    }
+
+    public HashSet<Usuario> listarUsuarios()
+            throws PersistenciaException, LibreriaException {
+
+        HashSet<Usuario> usuarios = new HashSet<>();
+
+        String query = "SELECT * FROM usuarios";
+
+        try (Connection con = Conexion.abrir();
+             PreparedStatement ps = con.prepareStatement(query);
+             ResultSet rs = ps.executeQuery()) {
+
+            checkTabla(con);
+
+            while (rs.next()) {
+                Usuario u = new Usuario(
+                        rs.getInt("id_usuario"),
+                        rs.getString("usuario"),
+                        rs.getString("contrasenia"),
+                        TipoUsuario.valueOf(rs.getString("tipo_usuario"))
+                );
+
+                usuarios.add(u);
+            }
+
+            return usuarios;
+
+        } catch (SQLException e) {
             throw new PersistenciaException(4);
         }
     }
