@@ -44,7 +44,7 @@ public class ConexionReserva {
             Connection connection = Conexion.abrir();
             checkTabla(connection);
             Statement st = connection.createStatement();
-            ResultSet resultSet = st.executeQuery("Select * from libros where id_pasajero="+pasajero_id+";");
+            ResultSet resultSet = st.executeQuery("Select * from reservas where id_pasajero="+pasajero_id+";");
             ArrayList<Reserva> reservas = new ArrayList<>();
             while (resultSet.next()){
                 Reserva reserva = new Reserva(
