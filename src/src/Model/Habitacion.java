@@ -1,37 +1,71 @@
 package Model;
 import Enum.HabitacionEstado;
+
+import java.util.Objects;
+
 public class Habitacion {
-    private int numero;
+
+    private int idHabitacion;
+    private int numeroHabitacion;
+    private double precioPorDia;
     private HabitacionEstado habitacionEstado;
-    private double precio_por_dia;
+    private String motivo;
 
-    public Habitacion(int numero, HabitacionEstado habitacionEstado, double precio_por_dia) {
-        this.numero = numero;
+    public Habitacion(int numeroHabitacion, double precioPorDia) {
+        this.idHabitacion = 0;
+        this.numeroHabitacion = numeroHabitacion;
+        this.precioPorDia = precioPorDia;
+        this.habitacionEstado = HabitacionEstado.DISPONIBLE;
+        this.motivo = null;
+    }
+
+    public Habitacion(int idHabitacion, int numeroHabitacion, double precioPorDia, HabitacionEstado habitacionEstado, String motivo) {
+        this.idHabitacion = idHabitacion;
+        this.numeroHabitacion = numeroHabitacion;
+        this.precioPorDia = precioPorDia;
         this.habitacionEstado = habitacionEstado;
-        this.precio_por_dia = precio_por_dia;
+        this.motivo = motivo;
     }
 
-    public int getNumero() {
-        return numero;
+    public int getIdHabitacion() { return idHabitacion; }
+
+    public void setIdHabitacion(int idHabitacion) { this.idHabitacion = idHabitacion;}
+
+    public int getNumeroHabitacion() {return numeroHabitacion; }
+
+    public void setNumeroHabitacion(int numeroHabitacion) {this.numeroHabitacion = numeroHabitacion;}
+
+    public double getPrecioPorDia() {return precioPorDia;}
+
+    public void setPrecioPorDia(double precioPorDia) {this.precioPorDia = precioPorDia;}
+
+    public HabitacionEstado getHabitacionEstado() {return habitacionEstado;}
+
+    public void setHabitacionEstado(HabitacionEstado habitacionEstado) {this.habitacionEstado = habitacionEstado;}
+
+    public void setMotivo(String motivo) {this.motivo = motivo;}
+
+    public String getMotivo() {return motivo;}
+
+    @Override
+    public boolean equals(Object o) {
+        if (!(o instanceof Habitacion that)) return false;
+        return numeroHabitacion == that.numeroHabitacion;
     }
 
-    public void setNumero(int numero) {
-        this.numero = numero;
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(numeroHabitacion);
     }
 
-    public HabitacionEstado getHabitacionEstado() {
-        return habitacionEstado;
-    }
-
-    public void setHabitacionEstado(HabitacionEstado habitacionEstado) {
-        this.habitacionEstado = habitacionEstado;
-    }
-
-    public double getPrecio_por_dia() {
-        return precio_por_dia;
-    }
-
-    public void setPrecio_por_dia(double precio_por_dia) {
-        this.precio_por_dia = precio_por_dia;
+    @Override
+    public String toString() {
+        return "Habitacion{" +
+                "idHabitacion=" + idHabitacion +
+                ", numeroHabitacion=" + numeroHabitacion +
+                ", precioPorDia=" + precioPorDia +
+                ", habitacionEstado=" + habitacionEstado +
+                ", motivo='" + motivo + '\'' +
+                '}';
     }
 }
