@@ -2,12 +2,12 @@ package Model;
 import Enum.TipoUsuario;
 public class Usuario {
     private String usuario;
-    private String contraseña;
+    private String contrasenia;
     private TipoUsuario tipo_usuario;
 
-    public Usuario(String usuario, String contraseña, TipoUsuario tipo_usuario) {
+    public Usuario(String usuario, String contrasenia, TipoUsuario tipo_usuario) {
         this.usuario = usuario;
-        this.contraseña = contraseña;
+        this.contrasenia = contrasenia;
         this.tipo_usuario = tipo_usuario;
     }
 
@@ -20,11 +20,11 @@ public class Usuario {
     }
 
     public String getContraseña() {
-        return contraseña;
+        return contrasenia;
     }
 
     public void setContraseña(String contraseña) {
-        this.contraseña = contraseña;
+        this.contrasenia = contraseña;
     }
 
     public TipoUsuario getTipo_usuario() {

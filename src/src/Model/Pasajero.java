@@ -1,22 +1,22 @@
 package Model;
 
 public class Pasajero {
-    private int id_pasajero;
+    private int id_usuario;
     private String dni;
     private String nombre;
     private String origen;
     private String domicilio;
 
-    public Pasajero(int id_pasajero, String dni, String nombre, String origen, String domicilio) {
-        this.id_pasajero = id_pasajero;
+    public Pasajero(int id_usuario, String dni, String nombre, String origen, String domicilio) {
+        this.id_usuario = id_usuario;
         this.dni = dni;
         this.nombre = nombre;
         this.origen = origen;
         this.domicilio = domicilio;
     }
 
-    public int getId_pasajero() {
-        return id_pasajero;
+    public int getId_usuario() {
+        return id_usuario;
     }
 
     public String getDni() {
@@ -49,5 +49,11 @@ public class Pasajero {
 
     public void setDomicilio(String domicilio) {
         this.domicilio = domicilio;
+    }
+
+    @Override
+    public String toString() {
+        return "Dni: " + dni + ", nombre: " + nombre + ", origen: "
+                + origen + ", domicilio: " + domicilio;
     }
 }
