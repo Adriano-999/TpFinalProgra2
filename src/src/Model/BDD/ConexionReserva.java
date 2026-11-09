@@ -44,7 +44,7 @@ public class ConexionReserva {
             Connection connection = Conexion.abrir();
             checkTabla(connection);
             Statement st = connection.createStatement();
-            ResultSet resultSet = st.executeQuery("Select * from libros where id_pasajero="+pasajero_id+";");
+            ResultSet resultSet = st.executeQuery("Select * from reservas where id_pasajero="+pasajero_id+";");
             ArrayList<Reserva> reservas = new ArrayList<>();
             while (resultSet.next()){
                 Reserva reserva = new Reserva(
@@ -75,7 +75,7 @@ public class ConexionReserva {
             Connection connection = Conexion.abrir();
             checkTabla(connection);
             boolean update = false;
-            if (reserva.getId() >  0){
+            if (reserva.getId() >  0){// reservas con id -1 automaticamente se aniaden a como nuevas a la tabla (se les asigna un nuevo id)
                 Statement st = connection.createStatement();
                 ResultSet resultSet = st.executeQuery("Select * from reservas where id_reserva="+reserva.getId()+";");
                 update = resultSet.next();
@@ -101,7 +101,7 @@ public class ConexionReserva {
                         "INSERT INTO reservas (id_pasajero, id_habitacion, fecha_inicio) VALUES ("+
                                 reserva.getPasajero_id()+","+
                                 reserva.getHabitacion_id()+","+
-                                reserva.getFechaInicio()+","+");"
+                                reserva.getFechaInicio()+");"
                 );
                 st.close();
             }
