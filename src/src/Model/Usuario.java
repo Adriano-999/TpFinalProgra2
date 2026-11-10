@@ -25,15 +25,21 @@ public class Usuario {
         this.usuario = usuario;
     }
 
-    public String getContraseña() {
+    public String getContrasenia() {
         return contrasenia;
     }
 
-    public void setContraseña(String contraseña) {
-        this.contrasenia = contraseña;
+    public void setContrasenia(String contrasenia) {
+        this.contrasenia = contrasenia;
     }
 
     public TipoUsuario getTipo_usuario() {
         return tipo_usuario;
+    }
+
+    @Override
+    public String toString() {
+        return "Id Usuario: " + id_usuario + ", usuario: " + usuario + ", contrasenia: " + contrasenia
+                + ", tipo usuario: " + tipo_usuario;
     }
 }
