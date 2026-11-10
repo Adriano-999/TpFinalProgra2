@@ -1,6 +1,6 @@
 package Exception;
 
-public class GestorException extends Exception {
+public abstract class GestorException extends Exception {
     public GestorException(String message) {
         super(message);
     }

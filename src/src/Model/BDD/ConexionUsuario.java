@@ -54,56 +54,17 @@ public class ConexionUsuario {
     public void eliminarUsuario(int id_usuario) throws PersistenciaException, LibreriaException
     {
         String query = "DELETE FROM usuarios WHERE id_usuario = ?";
-
-        try (Connection con = Conexion.abrir()) {
+        try (Connection con = Conexion.abrir();
+             PreparedStatement ps = con.prepareStatement(query)) {
 
             checkTabla(con);
 
-            try (PreparedStatement ps = con.prepareStatement(query)) {
-
-                ps.setInt(1, id_usuario);
-                ps.executeUpdate();
-
-            }
+            ps.setInt(1, id_usuario);
+            ps.executeUpdate();
 
         } catch (SQLException e) {
             throw new PersistenciaException(3);
         }
-    }
-
-    public Usuario buscarUsuario(String usuario)
-            throws PersistenciaException, LibreriaException {
-
-        String query = "SELECT * FROM usuarios WHERE usuario = ?";
-
-        try (Connection con = Conexion.abrir()) {
-
-            checkTabla(con);
-
-            try (PreparedStatement ps = con.prepareStatement(query)) {
-
-                ps.setString(1, usuario);
-
-                try (ResultSet rs = ps.executeQuery()) {
-
-                    if (rs.next()) {
-                        Usuario u = new Usuario(
-                                rs.getInt("id_usuario"),
-                                rs.getString("usuario"),
-                                rs.getString("contrasenia"),
-                                TipoUsuario.valueOf(rs.getString("tipo_usuario"))
-                        );
-
-                        return u;
-                    }
-                }
-            }
-
-        } catch (SQLException e) {
-            throw new PersistenciaException(4);
-        }
-
-        return null;
     }
 
     public HashSet<Usuario> listarUsuarios()
@@ -113,24 +74,21 @@ public class ConexionUsuario {
 
         String query = "SELECT * FROM usuarios";
 
-        try (Connection con = Conexion.abrir()) {
+        try (Connection con = Conexion.abrir();
+             PreparedStatement ps = con.prepareStatement(query);
+             ResultSet rs = ps.executeQuery()) {
 
             checkTabla(con);
 
-            try (PreparedStatement ps = con.prepareStatement(query);
-                 ResultSet rs = ps.executeQuery()) {
+            while (rs.next()) {
+                Usuario u = new Usuario(
+                        rs.getInt("id_usuario"),
+                        rs.getString("usuario"),
+                        rs.getString("contrasenia"),
+                        TipoUsuario.valueOf(rs.getString("tipo_usuario"))
+                );
 
-                while (rs.next()) {
-                    Usuario u = new Usuario(
-                            rs.getInt("id_usuario"),
-                            rs.getString("usuario"),
-                            rs.getString("contrasenia"),
-                            TipoUsuario.valueOf(rs.getString("tipo_usuario"))
-                    );
-
-                    usuarios.add(u);
-                }
-
+                usuarios.add(u);
             }
 
             return usuarios;
@@ -144,7 +102,7 @@ public class ConexionUsuario {
         try {
             Statement st = connection.createStatement();
             st.execute("create table if not exists usuarios ( " +
-                    "id_usuario int auto_increment primary key not null , " +
+                    "id_usuario int autoincrement primary key not null , " +
                     "usuario varchar(20) unique not null, " +
                     "contrasenia varchar(20) not null, " +
                     "tipo_usuario varchar(20) not null;");
