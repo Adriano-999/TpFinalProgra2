@@ -51,6 +51,41 @@ public class ConexionUsuario {
         }
     }
 
+    public Usuario buscarUsuario(String usuario)
+            throws PersistenciaException, LibreriaException {
+
+        String query = "SELECT * FROM usuarios WHERE usuario = ?";
+
+        try (Connection con = Conexion.abrir()) {
+
+            checkTabla(con);
+
+            try (PreparedStatement ps = con.prepareStatement(query)) {
+
+                ps.setString(1, usuario);
+
+                try (ResultSet rs = ps.executeQuery()) {
+
+                    if (rs.next()) {
+                        Usuario u = new Usuario(
+                                rs.getInt("id_usuario"),
+                                rs.getString("usuario"),
+                                rs.getString("contrasenia"),
+                                TipoUsuario.valueOf(rs.getString("tipo_usuario"))
+                        );
+
+                        return u;
+                    }
+                }
+            }
+
+        } catch (SQLException e) {
+            throw new PersistenciaException(4);
+        }
+
+        return null;
+    }
+
     public void eliminarUsuario(int id_usuario) throws PersistenciaException, LibreriaException
     {
         String query = "DELETE FROM usuarios WHERE id_usuario = ?";
