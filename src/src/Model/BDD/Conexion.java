@@ -11,8 +11,12 @@ public class Conexion {
     public static Connection abrir() throws LibreriaException, PersistenciaException {
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
-            String schema = "2026_C7_ _TP_Final_Progra";
-            connection = DriverManager.getConnection("jdbc:mysql://172.16.1.64:3306/"+schema,"bdd1","bdd1");
+            String schema = "2026_C7_Feliziani_Benitez_Raimondo_TP_Final_Progra";
+            String IP = "172.16.1.64";
+            String port = "3306";
+            String usuario = "bdd1";
+            String contrasenia = "bdd1";
+            connection = DriverManager.getConnection("jdbc:mysql://"+IP+":"+port+"/"+schema,usuario,contrasenia);
             return connection;
         } catch (ClassNotFoundException e) {
             throw new LibreriaException();
