@@ -11,7 +11,7 @@ import Exception.LibreriaException;
 
 public class ConexionPasajero {
 
-    public boolean cargarPasajero(Pasajero pasajero) throws PersistenciaException, LibreriaException
+    public boolean guardarPasajero(Pasajero pasajero) throws PersistenciaException, LibreriaException
     {
         String query = "INSERT INTO pasajeros values(?,?,?,?,?)";
         try(Connection con = Conexion.abrir()) {
