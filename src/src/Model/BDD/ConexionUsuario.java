@@ -24,7 +24,6 @@ public class ConexionUsuario {
                 Usuario u = new Usuario(rs.getInt("id_usuario"), rs.getString("usuario"), rs.getString("contrasenia"), TipoUsuario.valueOf(rs.getString("tipo_usuario")));
             ps.close();
             rs.close();
-            Conexion.cerrar();
             return u;}
             return null;
         }catch(SQLException e)
@@ -45,7 +44,6 @@ public class ConexionUsuario {
             ps.setString(3, tipoUsuario.name());
             ps.executeUpdate();
                 ps.close();
-                Conexion.cerrar();
                 return true;
         }catch(SQLException e)
         {
@@ -63,8 +61,6 @@ public class ConexionUsuario {
 
             ps.setInt(1, id_usuario);
             ps.executeUpdate();
-            ps.close();
-            Conexion.cerrar();
 
         } catch (SQLException e) {
             throw new PersistenciaException(3);
@@ -96,7 +92,6 @@ public class ConexionUsuario {
             }
             rs.close();
             ps.close();
-            Conexion.cerrar();
 
             return usuarios;
 
@@ -109,10 +104,10 @@ public class ConexionUsuario {
         try {
             Statement st = connection.createStatement();
             st.execute("create table if not exists usuarios ( " +
-                    "id_usuario int autoincrement primary key not null , " +
+                    "id_usuario int auto_increment primary key not null , " +
                     "usuario varchar(20) unique not null, " +
                     "contrasenia varchar(20) not null, " +
-                    "tipo_usuario varchar(20) not null;");
+                    "tipo_usuario varchar(20) not null);");
             st.execute("INSERT INTO usuarios (usuario,contrasenia,tipo_usuario) " +
                             "SELECT 'admin', 'admin', 'ADMINISTRADOR'  " +
                             "WHERE NOT EXISTS (SELECT * FROM usuarios);");
