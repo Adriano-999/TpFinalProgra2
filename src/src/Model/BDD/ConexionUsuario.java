@@ -32,7 +32,7 @@ public class ConexionUsuario {
         }
     }
 
-    public boolean crearUsuario(String usuario, String contrasenia, TipoUsuario tipoUsuario) throws LibreriaException, PersistenciaException
+    public static boolean crearUsuario(String usuario, String contrasenia, TipoUsuario tipoUsuario) throws LibreriaException, PersistenciaException
     {
         String query = "INSERT INTO usuarios (usuario, contrasenia, tipo_usuario) values (?,?,?)";
         try(Connection con = Conexion.abrir())
@@ -51,7 +51,7 @@ public class ConexionUsuario {
         }
     }
 
-    public void eliminarUsuario(int id_usuario) throws PersistenciaException, LibreriaException
+    public static void eliminarUsuario(int id_usuario) throws PersistenciaException, LibreriaException
     {
         String query = "DELETE FROM usuarios WHERE id_usuario = ?";
         try (Connection con = Conexion.abrir();
@@ -67,7 +67,7 @@ public class ConexionUsuario {
         }
     }
 
-    public HashSet<Usuario> listarUsuarios()
+    public static HashSet<Usuario> listarUsuarios()
             throws PersistenciaException, LibreriaException {
 
         HashSet<Usuario> usuarios = new HashSet<>();
