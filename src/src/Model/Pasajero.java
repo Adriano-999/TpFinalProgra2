@@ -1,22 +1,16 @@
 package Model;
 
 public class Pasajero {
-    private int id_usuario;
     private String dni;
     private String nombre;
     private String origen;
     private String domicilio;
 
-    public Pasajero(int id_usuario, String dni, String nombre, String origen, String domicilio) {
-        this.id_usuario = id_usuario;
+    public Pasajero(String dni, String nombre, String origen, String domicilio) {
         this.dni = dni;
         this.nombre = nombre;
         this.origen = origen;
         this.domicilio = domicilio;
-    }
-
-    public int getId_usuario() {
-        return id_usuario;
     }
 
     public String getDni() {
