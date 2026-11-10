@@ -2,6 +2,9 @@ package Exception;
 
 public class PersistenciaException extends Exception{
     public PersistenciaException(int i) {
+        super(Mensaje(i));
+    }
+    private static String Mensaje(int i){
         String mensaje;
         switch (i){
             case 1:
@@ -20,7 +23,7 @@ public class PersistenciaException extends Exception{
                 mensaje = "Error de servidor.";
                 break;
         }
-        super(mensaje);
+        return mensaje;
     }
     public PersistenciaException(String mensaje) {
         super(mensaje);
