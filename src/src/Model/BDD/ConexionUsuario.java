@@ -113,7 +113,9 @@ public class ConexionUsuario {
                     "usuario varchar(20) unique not null, " +
                     "contrasenia varchar(20) not null, " +
                     "tipo_usuario varchar(20) not null;");
-
+            st.execute("INSERT INTO my_table (usuario,contrasenia,tipo_usuario) " +
+                            "SELECT 'admin', 'admin', 'ADMINISTRADOR'  " +
+                            "WHERE NOT EXISTS (SELECT * FROM my_table);");
             st.close();
         } catch (SQLException e) {
             throw new PersistenciaException(2);
