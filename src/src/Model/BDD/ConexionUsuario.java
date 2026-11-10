@@ -24,6 +24,7 @@ public class ConexionUsuario {
                 Usuario u = new Usuario(rs.getInt("id_usuario"), rs.getString("usuario"), rs.getString("contrasenia"), TipoUsuario.valueOf(rs.getString("tipo_usuario")));
             ps.close();
             rs.close();
+            Conexion.cerrar();
             return u;}
             return null;
         }catch(SQLException e)
@@ -44,46 +45,12 @@ public class ConexionUsuario {
             ps.setString(3, tipoUsuario.name());
             ps.executeUpdate();
                 ps.close();
+                Conexion.cerrar();
                 return true;
         }catch(SQLException e)
         {
             throw new PersistenciaException(3);
         }
-    }
-
-    public Usuario buscarUsuario(String usuario)
-            throws PersistenciaException, LibreriaException {
-
-        String query = "SELECT * FROM usuarios WHERE usuario = ?";
-
-        try (Connection con = Conexion.abrir()) {
-
-            checkTabla(con);
-
-            try (PreparedStatement ps = con.prepareStatement(query)) {
-
-                ps.setString(1, usuario);
-
-                try (ResultSet rs = ps.executeQuery()) {
-
-                    if (rs.next()) {
-                        Usuario u = new Usuario(
-                                rs.getInt("id_usuario"),
-                                rs.getString("usuario"),
-                                rs.getString("contrasenia"),
-                                TipoUsuario.valueOf(rs.getString("tipo_usuario"))
-                        );
-
-                        return u;
-                    }
-                }
-            }
-
-        } catch (SQLException e) {
-            throw new PersistenciaException(4);
-        }
-
-        return null;
     }
 
     public void eliminarUsuario(int id_usuario) throws PersistenciaException, LibreriaException
@@ -96,6 +63,8 @@ public class ConexionUsuario {
 
             ps.setInt(1, id_usuario);
             ps.executeUpdate();
+            ps.close();
+            Conexion.cerrar();
 
         } catch (SQLException e) {
             throw new PersistenciaException(3);
@@ -125,6 +94,9 @@ public class ConexionUsuario {
 
                 usuarios.add(u);
             }
+            rs.close();
+            ps.close();
+            Conexion.cerrar();
 
             return usuarios;
 
@@ -141,6 +113,9 @@ public class ConexionUsuario {
                     "usuario varchar(20) unique not null, " +
                     "contrasenia varchar(20) not null, " +
                     "tipo_usuario varchar(20) not null;");
+            st.execute("INSERT INTO my_table (usuario,contrasenia,tipo_usuario) " +
+                            "SELECT 'admin', 'admin', 'ADMINISTRADOR'  " +
+                            "WHERE NOT EXISTS (SELECT * FROM my_table);");
             st.close();
         } catch (SQLException e) {
             throw new PersistenciaException(2);
