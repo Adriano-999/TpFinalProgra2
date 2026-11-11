@@ -11,7 +11,7 @@ import Model.Usuario;
 
 public class ConexionPasajero {
 
-    public boolean guardarPasajero(Pasajero pasajero) throws PersistenciaException, LibreriaException {
+    public static boolean guardarPasajero(Pasajero pasajero) throws PersistenciaException, LibreriaException {
         String query = "INSERT INTO pasajeros values(?,?,?,?)";
         try (Connection con = Conexion.abrir()) {
             checkTabla(con);
@@ -28,7 +28,7 @@ public class ConexionPasajero {
         }
     }
 
-    public void eliminarPasajero(String dni) throws PersistenciaException, LibreriaException {
+    public static void eliminarPasajero(String dni) throws PersistenciaException, LibreriaException {
         String query = "DELETE FROM pasajeros WHERE dni = ?";
         try (Connection con = Conexion.abrir();
              PreparedStatement ps = con.prepareStatement(query)) {
@@ -45,7 +45,7 @@ public class ConexionPasajero {
         }
     }
 
-    public Pasajero buscarPasajero(String dni)
+    public static Pasajero buscarPasajero(String dni)
             throws PersistenciaException, LibreriaException {
 
         String query = "SELECT * FROM pasajeros WHERE dni = ?";
@@ -82,7 +82,7 @@ public class ConexionPasajero {
         return null;
 }
 
-    public HashSet<Pasajero> listarPasajeros()
+    public static HashSet<Pasajero> listarPasajeros()
             throws PersistenciaException, LibreriaException {
 
         HashSet<Pasajero> pasajeros = new HashSet<>();
