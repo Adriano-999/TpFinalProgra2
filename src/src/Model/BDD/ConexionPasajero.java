@@ -11,10 +11,9 @@ import Model.Usuario;
 
 public class ConexionPasajero {
 
-    public boolean guardarPasajero(Pasajero pasajero) throws PersistenciaException, LibreriaException
-    {
+    public boolean guardarPasajero(Pasajero pasajero) throws PersistenciaException, LibreriaException {
         String query = "INSERT INTO pasajeros values(?,?,?,?)";
-        try(Connection con = Conexion.abrir()) {
+        try (Connection con = Conexion.abrir()) {
             checkTabla(con);
             PreparedStatement ps = con.prepareStatement(query);
             ps.setString(1, pasajero.getDni());
@@ -29,8 +28,7 @@ public class ConexionPasajero {
         }
     }
 
-    public void eliminarPasajero(String dni) throws PersistenciaException, LibreriaException
-    {
+    public void eliminarPasajero(String dni) throws PersistenciaException, LibreriaException {
         String query = "DELETE FROM pasajeros WHERE dni = ?";
         try (Connection con = Conexion.abrir();
              PreparedStatement ps = con.prepareStatement(query)) {
@@ -46,6 +44,43 @@ public class ConexionPasajero {
             throw new PersistenciaException(3);
         }
     }
+
+    public Pasajero buscarPasajero(String dni)
+            throws PersistenciaException, LibreriaException {
+
+        String query = "SELECT * FROM pasajeros WHERE dni = ?";
+
+        try (Connection con = Conexion.abrir()) {
+
+            checkTabla(con);
+
+            try (PreparedStatement ps = con.prepareStatement(query)) {
+
+                ps.setString(1, dni);
+
+                try (ResultSet rs = ps.executeQuery()) {
+
+                    if (rs.next()) {
+                        Model.Pasajero p = new Pasajero(
+                                rs.getString("dni"),
+                                rs.getString("nombre"),
+                                rs.getString("origen"),
+                                rs.getString("domicilio")
+                        );
+
+                        return p;
+                    }
+                }
+            }
+        }
+ catch(
+    SQLException e)
+
+    {
+        throw new PersistenciaException(4);
+    }
+        return null;
+}
 
     public HashSet<Pasajero> listarPasajeros()
             throws PersistenciaException, LibreriaException {
