@@ -1,59 +1,60 @@
 package Model;
 
+import Interface.IGestor;
 import Model.BDD.ConexionHabitacion;
 import Exception.*;
 import Enum.*;
-import java.security.Guard;
-import java.util.HashSet;
+
+import java.util.HashMap;
 import java.util.ArrayList;
+import java.util.Map;
 
-public class Hotel {
-    private HashSet<Habitacion> habitaciones;
-    private HashSet<Reserva> reservas;
+public class GestorHabitaciones implements IGestor<Habitacion, Integer> {
+    private Map<Integer, Habitacion> cache;
 
-    public Hotel() {
-        habitaciones = new HashSet<>();
-        reservas = new HashSet<>();
+    public GestorHabitaciones() {
+        cache = new HashMap<>();
     }
 
-    public void validarHabitacion(Habitacion habitacion) throws DatosInvalidosException{
-        if(habitacion == null){
+    @Override
+    public boolean guardar(Habitacion item) throws PersistenciaException, LibreriaException, DatosInvalidosException {
+        if(item == null){
             throw new DatosInvalidosException();
         }
-        if(habitacion.getNumeroHabitacion() <= 0){
+        item.validarHabitacion(item);
+        if(item.getIdHabitacion() <= 0 && buscarHabitacionPorNumero(item.getNumeroHabitacion()) != null){
             throw new DatosInvalidosException();
         }
-        if(habitacion.getPrecioPorDia() <= 0){
-            throw new DatosInvalidosException();
-        }
-    }
-
-    public boolean registrarHabitacion(Habitacion habitacion) throws LibreriaException, PersistenciaException, DatosInvalidosException {
-        validarHabitacion(habitacion);
-        if(buscarHabitacionPorNumero(habitacion.getNumeroHabitacion()) != null){
-            throw new DatosInvalidosException();
-        }
-        boolean guardada = ConexionHabitacion.guardarHabitacion(habitacion);
-        if(guardada){
-            habitaciones.add(habitacion);
+        boolean guardada = ConexionHabitacion.guardarHabitacion(item);
+        if(guardada && item.getIdHabitacion() > 0){
+            cache.put(item.getIdHabitacion(), item);
         }
         return guardada;
     }
 
-    public Habitacion buscarHabitacion(int id) throws LibreriaException, PersistenciaException, NoEncontradoException{
-        Habitacion habitacion = ConexionHabitacion.buscarHabitacion(id);
-        habitaciones.add(habitacion);
-        return habitacion;
+    @Override
+    public Habitacion buscarPorId(Integer integer) throws PersistenciaException, LibreriaException, NoEncontradoException {
+        return null;
+    }
+
+    @Override
+    public ArrayList<Habitacion> listarTodos() {
+        return null;
+    }
+
+    @Override
+    public boolean eliminar(Integer integer) throws PersistenciaException, NoEncontradoException, LibreriaException {
+        return false;
     }
 
     public Habitacion buscarHabitacionPorNumero(int numero){
      Habitacion found = null;
 
-     for(Habitacion habitacion : habitaciones){
+     /*for(Habitacion habitacion : habitaciones){
          if(habitacion.getNumeroHabitacion() == numero){
              found = habitacion;
          }
-     }
+     }*/
      return found;
     }
 
@@ -82,7 +83,7 @@ public class Hotel {
         }
     }
 
-    public boolean borrarHabitacion(int id) throws LibreriaException, PersistenciaException{
+    /*public boolean borrarHabitacion(int id) throws LibreriaException, PersistenciaException{
         boolean borrada = ConexionHabitacion.borrarHabitacion(id);
 
         Habitacion found = null;
@@ -95,5 +96,5 @@ public class Hotel {
             habitaciones.remove(found);
         }
         return borrada;
-    }
+    }*/
 }

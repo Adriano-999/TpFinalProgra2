@@ -2,6 +2,7 @@ package Model;
 import Enum.HabitacionEstado;
 
 import java.util.Objects;
+import Exception.DatosInvalidosException;
 
 public class Habitacion {
 
@@ -46,6 +47,18 @@ public class Habitacion {
     public void setMotivo(String motivo) {this.motivo = motivo;}
 
     public String getMotivo() {return motivo;}
+
+    public void validarHabitacion(Habitacion habitacion) throws DatosInvalidosException {
+        if(habitacion == null){
+            throw new DatosInvalidosException();
+        }
+        if(habitacion.getNumeroHabitacion() <= 0){
+            throw new DatosInvalidosException();
+        }
+        if(habitacion.getPrecioPorDia() <= 0){
+            throw new DatosInvalidosException();
+        }
+    }
 
     @Override
     public boolean equals(Object o) {
