@@ -2,26 +2,25 @@ package Model.BDD;
 
 import Model.Pasajero;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
+import java.util.HashSet;
+
 import Exception.PersistenciaException;
 import Exception.LibreriaException;
+import Model.Usuario;
 
 public class ConexionPasajero {
 
     public boolean guardarPasajero(Pasajero pasajero) throws PersistenciaException, LibreriaException
     {
-        String query = "INSERT INTO pasajeros values(?,?,?,?,?)";
+        String query = "INSERT INTO pasajeros values(?,?,?,?)";
         try(Connection con = Conexion.abrir()) {
             checkTabla(con);
             PreparedStatement ps = con.prepareStatement(query);
-            ps.setInt(1, pasajero.getId_usuario());
-            ps.setString(2, pasajero.getDni());
-            ps.setString(3, pasajero.getNombre());
-            ps.setString(4, pasajero.getOrigen());
-            ps.setString(5, pasajero.getDomicilio());
+            ps.setString(1, pasajero.getDni());
+            ps.setString(2, pasajero.getNombre());
+            ps.setString(3, pasajero.getOrigen());
+            ps.setString(4, pasajero.getDomicilio());
             ps.executeUpdate();
             ps.close();
             return true;
@@ -30,17 +29,69 @@ public class ConexionPasajero {
         }
     }
 
+    public void eliminarPasajero(String dni) throws PersistenciaException, LibreriaException
+    {
+        String query = "DELETE FROM pasajeros WHERE dni = ?";
+        try (Connection con = Conexion.abrir();
+             PreparedStatement ps = con.prepareStatement(query)) {
+
+            checkTabla(con);
+
+            ps.setString(1, dni);
+            ps.executeUpdate();
+            ps.close();
+            Conexion.cerrar();
+
+        } catch (SQLException e) {
+            throw new PersistenciaException(3);
+        }
+    }
+
+    public HashSet<Pasajero> listarPasajeros()
+            throws PersistenciaException, LibreriaException {
+
+        HashSet<Pasajero> pasajeros = new HashSet<>();
+
+        String query = "SELECT * FROM pasajeros";
+
+        try (Connection con = Conexion.abrir()) {
+
+            checkTabla(con);
+
+            try (PreparedStatement ps = con.prepareStatement(query);
+                 ResultSet rs = ps.executeQuery()) {
+
+                while (rs.next()) {
+                    Pasajero p = new Pasajero(
+                            rs.getString("dni"),
+                            rs.getString("nombre"),
+                            rs.getString("origen"),
+                            rs.getString("domicilio")
+                    );
+
+                    pasajeros.add(p);
+                }
+                rs.close();
+                ps.close();
+                Conexion.cerrar();
+            }
+
+            return pasajeros;
+
+        } catch (SQLException e) {
+            throw new PersistenciaException(4);
+        }
+    }
+
     private static void checkTabla(Connection connection) throws PersistenciaException {
         try {
             Statement st = connection.createStatement();
             st.execute("create table if not exists pasajeros ( " +
                     "id_pasajero int auto_increment primary key not null , " +
-                    "id_usuario int not null, " +
                     "dni varchar(10) not null unique, " +
                     "nombre varchar(20) not null, " +
                     "origen varchar(20) not null, " +
-                    "domicilio varchar(20) not null" +
-                    "FOREIGN KEY (id_usuario) REFERENCES usuarios(id_usuario);");
+                    "domicilio varchar(20) not null;");
             st.close();
         } catch (SQLException e) {
             throw new PersistenciaException(2);

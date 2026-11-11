@@ -50,30 +50,6 @@ public class Main {
                                         throw new DatosInvalidosException();
                                 }
                             }
-                            case PASAJERO -> {
-                                System.out.println("1: Opcion pasajero");
-                                System.out.println("2: Opcion 2");
-                                System.out.println("3: Opcion 3");
-                                System.out.println("9: Cerrar");
-                                choice = sc.nextInt();
-                                sc.nextLine();
-
-                                switch (choice) {
-                                    case 0:
-                                        break;
-                                    case 1:
-
-                                        break;
-                                    case 2:
-
-                                        break;
-                                    case 9:
-                                        end = true;
-                                        break;
-                                    default:
-                                        throw new DatosInvalidosException();
-                                }
-                            }
                             case ADMINISTRADOR -> {
                                 System.out.println("1: Opcion admin");
                                 System.out.println("2: Opcion 2");
