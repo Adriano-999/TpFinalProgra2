@@ -33,35 +33,50 @@ public class GestorHabitaciones implements IGestor<Habitacion, Integer> {
     }
 
     @Override
-    public Habitacion buscarPorId(Integer integer) throws PersistenciaException, LibreriaException, NoEncontradoException {
-        return null;
+    public Habitacion buscarPorId(Integer id) throws PersistenciaException, LibreriaException, NoEncontradoException {
+        if (cache.containsKey(id)){
+            return cache.get(id);
+        }
+        Habitacion habitacion = ConexionHabitacion.buscarHabitacion(id);
+        cache.put(habitacion.getIdHabitacion(), habitacion);
+        return habitacion;
     }
 
     @Override
     public ArrayList<Habitacion> listarTodos() {
-        return null;
+        ArrayList<Habitacion> habitaciones = new ArrayList<>();
+        for(Habitacion habitacion : cache.values()){
+            habitaciones.add(habitacion);
+        }
+        return habitaciones;
     }
 
     @Override
-    public boolean eliminar(Integer integer) throws PersistenciaException, NoEncontradoException, LibreriaException {
-        return false;
+    public boolean eliminar(Integer id) throws PersistenciaException, NoEncontradoException, LibreriaException {
+        boolean eliminada = ConexionHabitacion.borrarHabitacion(id);
+        if(eliminada){
+            cache.remove(id);
+        }
+        return eliminada;
     }
 
     public Habitacion buscarHabitacionPorNumero(int numero){
      Habitacion found = null;
-
-     /*for(Habitacion habitacion : habitaciones){
+     for(Habitacion habitacion : cache.values()){
          if(habitacion.getNumeroHabitacion() == numero){
              found = habitacion;
          }
-     }*/
+     }
      return found;
     }
 
-
     public ArrayList<Habitacion> listarDisponibles() throws LibreriaException, PersistenciaException{
         try{
-            return ConexionHabitacion.buscarHabitacionesPorEstado(HabitacionEstado.DISPONIBLE);
+            ArrayList<Habitacion> habitaciones = ConexionHabitacion.buscarHabitacionesPorEstado(HabitacionEstado.DISPONIBLE);
+            for(Habitacion habitacion : habitaciones){
+                cache.put(habitacion.getIdHabitacion(), habitacion);
+            }
+            return habitaciones;
         } catch (NoEncontradoException e) {
             return new ArrayList<Habitacion>();
         }
@@ -69,7 +84,11 @@ public class GestorHabitaciones implements IGestor<Habitacion, Integer> {
 
     public ArrayList<Habitacion> listarOcupadas() throws LibreriaException, PersistenciaException{
         try{
-            return ConexionHabitacion.buscarHabitacionesPorEstado(HabitacionEstado.OCUPADA);
+            ArrayList<Habitacion> habitaciones = ConexionHabitacion.buscarHabitacionesPorEstado(HabitacionEstado.OCUPADA);
+            for(Habitacion habitacion : habitaciones){
+                cache.put(habitacion.getIdHabitacion(), habitacion);
+            }
+            return habitaciones;
         } catch (NoEncontradoException e) {
             return new ArrayList<Habitacion>();
         }
@@ -77,24 +96,13 @@ public class GestorHabitaciones implements IGestor<Habitacion, Integer> {
 
     public ArrayList<Habitacion> listarFueraDeServicio() throws LibreriaException, PersistenciaException{
         try{
-            return ConexionHabitacion.buscarHabitacionesPorEstado(HabitacionEstado.FUERA_DE_SERVICIO);
+            ArrayList<Habitacion> habitaciones = ConexionHabitacion.buscarHabitacionesPorEstado(HabitacionEstado.FUERA_DE_SERVICIO);
+            for(Habitacion habitacion : habitaciones){
+                cache.put(habitacion.getIdHabitacion(), habitacion);
+            }
+            return habitaciones;
         } catch (NoEncontradoException e) {
             return new ArrayList<Habitacion>();
         }
     }
-
-    /*public boolean borrarHabitacion(int id) throws LibreriaException, PersistenciaException{
-        boolean borrada = ConexionHabitacion.borrarHabitacion(id);
-
-        Habitacion found = null;
-        for(Habitacion habitacion : habitaciones){
-            if(habitacion.getIdHabitacion() == id){
-                found = habitacion;
-            }
-        }
-        if(found != null){
-            habitaciones.remove(found);
-        }
-        return borrada;
-    }*/
 }
