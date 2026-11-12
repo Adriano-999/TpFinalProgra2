@@ -7,6 +7,7 @@ import java.util.HashSet;
 
 import Exception.PersistenciaException;
 import Exception.LibreriaException;
+import Exception.NoEncontradoException;
 import Model.Usuario;
 
 public class ConexionPasajero {
@@ -28,7 +29,7 @@ public class ConexionPasajero {
         }
     }
 
-    public static void eliminarPasajero(String dni) throws PersistenciaException, LibreriaException {
+    public static void eliminarPasajero(String dni) throws PersistenciaException, LibreriaException, NoEncontradoException {
         String query = "DELETE FROM pasajeros WHERE dni = ?";
         try (Connection con = Conexion.abrir();
              PreparedStatement ps = con.prepareStatement(query)) {
@@ -46,7 +47,7 @@ public class ConexionPasajero {
     }
 
     public static Pasajero buscarPasajero(String dni)
-            throws PersistenciaException, LibreriaException {
+            throws PersistenciaException, LibreriaException, NoEncontradoException {
 
         String query = "SELECT * FROM pasajeros WHERE dni = ?";
 
@@ -83,7 +84,7 @@ public class ConexionPasajero {
 }
 
     public static HashSet<Pasajero> listarPasajeros()
-            throws PersistenciaException, LibreriaException {
+            throws PersistenciaException, LibreriaException, NoEncontradoException {
 
         HashSet<Pasajero> pasajeros = new HashSet<>();
 

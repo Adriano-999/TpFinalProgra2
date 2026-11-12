@@ -5,12 +5,13 @@ import java.util.HashSet;
 
 import Exception.LibreriaException;
 import Exception.PersistenciaException;
+import Exception.NoEncontradoException;
 import Model.Usuario;
 import Enum.TipoUsuario;
 
 public class ConexionUsuario {
 
-    public static Usuario ingresar(String usuario, String contrasenia) throws PersistenciaException, LibreriaException
+    public static Usuario ingresar(String usuario, String contrasenia) throws PersistenciaException, LibreriaException, NoEncontradoException
     {
         String query = "SELECT * FROM usuarios WHERE usuario = ? AND contrasenia = ?";
         try(Connection con = Conexion.abrir())
@@ -33,7 +34,7 @@ public class ConexionUsuario {
         }
     }
 
-    public boolean crearUsuario(String usuario, String contrasenia, TipoUsuario tipoUsuario) throws LibreriaException, PersistenciaException
+    public static boolean crearUsuario(String usuario, String contrasenia, TipoUsuario tipoUsuario) throws LibreriaException, PersistenciaException
     {
         String query = "INSERT INTO usuarios (usuario, contrasenia, tipo_usuario) values (?,?,?)";
         try(Connection con = Conexion.abrir())
@@ -53,8 +54,8 @@ public class ConexionUsuario {
         }
     }
 
-    public Usuario buscarUsuario(String usuario)
-            throws PersistenciaException, LibreriaException {
+    public static Usuario buscarUsuario(String usuario)
+            throws PersistenciaException, LibreriaException, NoEncontradoException {
 
         String query = "SELECT * FROM usuarios WHERE usuario = ?";
 
@@ -88,7 +89,7 @@ public class ConexionUsuario {
         return null;
     }
 
-    public void eliminarUsuario(int id_usuario) throws PersistenciaException, LibreriaException
+    public static void eliminarUsuario(int id_usuario) throws PersistenciaException, LibreriaException, NoEncontradoException
     {
         String query = "DELETE FROM usuarios WHERE id_usuario = ?";
         try (Connection con = Conexion.abrir();
@@ -106,8 +107,8 @@ public class ConexionUsuario {
         }
     }
 
-    public HashSet<Usuario> listarUsuarios()
-            throws PersistenciaException, LibreriaException {
+    public static HashSet<Usuario> listarUsuarios()
+            throws PersistenciaException, LibreriaException, NoEncontradoException {
 
         HashSet<Usuario> usuarios = new HashSet<>();
 
@@ -148,9 +149,9 @@ public class ConexionUsuario {
                     "usuario varchar(20) unique not null, " +
                     "contrasenia varchar(20) not null, " +
                     "tipo_usuario varchar(20) not null;");
-            st.execute("INSERT INTO my_table (usuario,contrasenia,tipo_usuario) " +
+            st.execute("INSERT INTO usuarios (usuario,contrasenia,tipo_usuario) " +
                             "SELECT 'admin', 'admin', 'ADMINISTRADOR'  " +
-                            "WHERE NOT EXISTS (SELECT * FROM my_table);");
+                            "WHERE NOT EXISTS (SELECT * FROM usuarios);");
             st.close();
         } catch (SQLException e) {
             throw new PersistenciaException(2);
