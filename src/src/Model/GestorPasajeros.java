@@ -33,15 +33,6 @@ public class GestorPasajeros implements IGestor<Pasajero,String> {
     }
 
     @Override
-    public ArrayList<Pasajero> listarTodos() { // devuelve t0do lo que esta en el cache actualmente
-        ArrayList<Pasajero> pasajeros = new ArrayList<>();
-        for (Map.Entry<String, Pasajero> entry : cache.entrySet()){
-            pasajeros.add(entry.getValue());
-        }
-        return pasajeros;
-    }
-
-    @Override
     public boolean eliminar(String s) throws PersistenciaException, NoEncontradoException, LibreriaException {
         if (cache.containsKey(s)){
             cache.remove(s);
