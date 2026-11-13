@@ -6,10 +6,15 @@ import Exception.PersistenciaException;
 import Exception.LibreriaException;
 import Exception.NoEncontradoException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Map;
 
 public class GestorPasajeros implements IGestor<Pasajero,String> {
     Map<String,Pasajero> cache;
+
+    public GestorPasajeros() {
+        cache = new HashMap<>();
+    }
 
     @Override
     public boolean guardar(Pasajero item) throws PersistenciaException, LibreriaException {
