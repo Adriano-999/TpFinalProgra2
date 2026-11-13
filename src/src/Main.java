@@ -111,7 +111,15 @@ public class Main {
 
                                         break;
                                     case 2:
+                                        System.out.println("Ingrese el nombre del usuario a buscar: ");
+                                        String usuarioBuscado = sc.nextLine();
 
+                                        Usuario encontrado = ConexionUsuario.buscarUsuario(usuarioBuscado);
+                                        if(encontrado == null){
+                                            System.out.println("No existe un usuario con el nombre " + usuarioBuscado);
+                                        } else{
+                                            System.out.println(encontrado);
+                                        }
                                         break;
                                     case 9:
                                         end = true;
