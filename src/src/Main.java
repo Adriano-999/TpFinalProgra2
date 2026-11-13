@@ -1,6 +1,7 @@
 import Exception.*;
 import Model.BDD.ConexionUsuario;
 import Model.Usuario;
+import Enum.*;
 
 import java.util.InputMismatchException;
 import java.util.Objects;
@@ -84,6 +85,29 @@ public class Main {
                                     case 0:
                                         break;
                                     case 1:
+                                        System.out.println("Ingrese el nombre de usuario: ");
+                                        String nuevoUser = sc.nextLine();
+                                        System.out.println("Ingrese la contrasenia: ");
+                                        String nuevaContrasenia = sc.nextLine();
+                                        System.out.println("Escoja el tipo de Usuario:");
+                                        System.out.println("1. Administrador");
+                                        System.out.println("2. Conserje");
+                                        int tipo = sc.nextInt();
+                                        sc.nextLine();
+
+                                        TipoUsuario tipoUsuario;
+                                        if(tipo == 1){
+                                            tipoUsuario = TipoUsuario.ADMINISTRADOR;
+                                        } else if (tipo == 2){
+                                            tipoUsuario = TipoUsuario.CONSERJE;
+                                        } else{
+                                            throw new DatosInvalidosException();
+                                        }
+                                        if(ConexionUsuario.crearUsuario(nuevoUser,nuevaContrasenia,tipoUsuario)){
+                                            System.out.println("Se ha creado al usuario " + nuevoUser + " correctamente.");
+                                        } else{
+                                            System.out.println("No se pudo crear al usuario " + nuevoUser);
+                                        }
 
                                         break;
                                     case 2:
