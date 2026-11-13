@@ -56,18 +56,10 @@ public class GestorReservas implements IGestor<Reserva, Integer> {
     public ArrayList<Reserva> buscarReservasPorPasajero(Pasajero pasajero) throws PersistenciaException, LibreriaException, NoEncontradoException
     {
         int id_pasajero = ConexionPasajero.obtenerId(pasajero.getDni());
-        ArrayList<Reserva> reservasAlCache = ConexionReserva.buscarReservasPorPasajero(id_pasajero);
-        for (Reserva r : reservasAlCache)
+        ArrayList<Reserva> reservas = ConexionReserva.buscarReservasPorPasajero(id_pasajero);
+        for (Reserva r : reservas)
         {
             cache.put(r.getId(), r);
-        }
-        ArrayList<Reserva> reservas = new ArrayList<>();
-        for (Reserva r : cache.values())
-        {
-            if(r.getPasajero_id()==id_pasajero)
-            {
-                reservas.add(r);
-            }
         }
         return reservas;
         }

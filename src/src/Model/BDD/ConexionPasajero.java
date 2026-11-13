@@ -3,6 +3,7 @@ package Model.BDD;
 import Model.Pasajero;
 
 import java.sql.*;
+import java.util.ArrayList;
 import java.util.HashSet;
 
 import Exception.PersistenciaException;
@@ -138,6 +139,38 @@ public class ConexionPasajero {
         {
             throw new PersistenciaException(3);
         }
+    }
+
+    public static ArrayList<Pasajero> buscarPasajerosPorNombre(String nombre) throws PersistenciaException, LibreriaException, NoEncontradoException
+    {
+        String query = "SELECT * FROM pasajeros WHERE nombre LIKE ?";
+
+        ArrayList<Pasajero> pasajeros = new ArrayList<>();
+
+        try (Connection con = Conexion.abrir()) {
+            checkTabla(con);
+
+            try (PreparedStatement ps = con.prepareStatement(query)) {
+                ps.setString(1, "%" + nombre + "%");
+
+                try (ResultSet rs = ps.executeQuery()) {
+                    while (rs.next()) {
+                        Pasajero p = new Pasajero(
+                                rs.getString("dni"),
+                                rs.getString("nombre"),
+                                rs.getString("origen"),
+                                rs.getString("domicilio")
+                        );
+
+                        pasajeros.add(p);
+                    }
+                }
+            }
+        } catch (SQLException e) {
+            throw new PersistenciaException(3);
+        }
+
+        return pasajeros;
     }
 
     private static void checkTabla(Connection connection) throws PersistenciaException {
