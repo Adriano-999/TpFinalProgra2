@@ -49,4 +49,17 @@ public class GestorPasajeros implements IGestor<Pasajero,String> {
         ConexionPasajero.eliminarPasajero(s);
         return true;
     }
+
+    public ArrayList<Pasajero> buscarPorNombre(String nombre) throws PersistenciaException, LibreriaException, NoEncontradoException {
+        ArrayList<Pasajero> pasajeros = ConexionPasajero.buscarPasajerosPorNombre(nombre);
+        for(Pasajero pasajero : pasajeros){
+            if (cache.containsKey(pasajero.getDni())){
+                cache.replace(pasajero.getDni(),pasajero);
+            }else {
+                cache.put(pasajero.getDni(),pasajero);
+            }
+        }
+        return pasajeros;
+    }
+
 }
