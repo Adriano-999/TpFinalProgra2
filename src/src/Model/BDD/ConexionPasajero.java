@@ -119,6 +119,27 @@ public class ConexionPasajero {
         }
     }
 
+    public static int obtenerId(String dni) throws PersistenciaException, LibreriaException, NoEncontradoException {
+        String query = "SELECT id_pasajero FROM pasajeros where dni = ?";
+        try (Connection con = Conexion.abrir()) {
+            checkTabla(con);
+            try (PreparedStatement ps = con.prepareStatement(query)) {
+                ps.setString(1, dni);
+                try (ResultSet rs = ps.executeQuery()) {
+                    if (rs.next()) {
+                        return rs.getInt("id_pasajero");
+                    } else {
+                        throw new NoEncontradoException();
+                    }
+                }
+            }
+        }
+        catch (SQLException e)
+        {
+            throw new PersistenciaException(3);
+        }
+    }
+
     private static void checkTabla(Connection connection) throws PersistenciaException {
         try {
             Statement st = connection.createStatement();
