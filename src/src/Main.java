@@ -1,7 +1,9 @@
 import Exception.*;
 import Model.BDD.ConexionUsuario;
+import Model.Habitacion;
 import Model.Usuario;
 import Enum.*;
+import Model.GestorHabitaciones;
 
 import java.util.InputMismatchException;
 import java.util.Objects;
@@ -14,6 +16,7 @@ public class Main {
         int choice;
         Scanner sc = new Scanner(System.in);
         Usuario usuario = null;
+        GestorHabitaciones gestorHabitaciones = new GestorHabitaciones();
         while (!end) {
             try {
                 if (Objects.isNull(usuario)) {
@@ -119,6 +122,23 @@ public class Main {
                                             System.out.println("No existe un usuario con el nombre " + usuarioBuscado);
                                         } else{
                                             System.out.println(encontrado);
+                                        }
+                                        break;
+                                    case 3:
+                                        //sin terminar
+                                        System.out.println("Ingrese el numero de la habitacion: ");
+                                        int numHabitacion = sc.nextInt();
+                                        sc.nextLine();
+                                        System.out.println("Ingrese el precio por dia: ");
+                                        double precioXDia = sc.nextDouble();
+                                        sc.nextLine();
+
+                                        Habitacion nuevaHabitacion = new Habitacion(numHabitacion, precioXDia);
+                                        if(gestorHabitaciones.guardar(nuevaHabitacion)){
+                                            System.out.println("Se creo correctamente la habitacion numero "
+                                                    + nuevaHabitacion.getNumeroHabitacion() + " con el precio por dia establecido en: " + nuevaHabitacion.getPrecioPorDia());
+                                        } else{
+                                            System.out.println("No se pudo crear la habitacion");
                                         }
                                         break;
                                     case 9:
