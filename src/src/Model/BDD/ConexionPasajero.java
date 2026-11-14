@@ -30,6 +30,31 @@ public class ConexionPasajero {
         }
     }
 
+    public static boolean modificarPasajero(Pasajero pasajero, String dni) throws PersistenciaException, LibreriaException, NoEncontradoException
+    {
+        String query = "UPDATE pasajeros SET dni = ?, nombre = ?, origen = ?, domicilio = ? WHERE dni = ?";
+        try(Connection con = Conexion.abrir())
+        {
+            checkTabla(con);
+            PreparedStatement ps = con.prepareStatement(query);
+            ps.setString(1, pasajero.getDni());
+            ps.setString(2, pasajero.getNombre());
+            ps.setString(3, pasajero.getOrigen());
+            ps.setString(4, pasajero.getDomicilio());
+            ps.setString(5, dni);
+            if(ps.executeUpdate() == 0)
+            {
+                throw new NoEncontradoException();
+            }
+            ps.close();
+            Conexion.cerrar();
+            return true;
+        }catch(SQLException e)
+        {
+            throw new PersistenciaException(3);
+        }
+    }
+
     public static void eliminarPasajero(String dni) throws PersistenciaException, LibreriaException, NoEncontradoException {
         String query = "DELETE FROM pasajeros WHERE dni = ?";
         try (Connection con = Conexion.abrir();

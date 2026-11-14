@@ -9,10 +9,15 @@ import Model.BDD.ConexionPasajero;
 import Model.BDD.ConexionReserva;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Map;
 
 public class GestorReservas implements IGestor<Reserva, Integer> {
     private Map<Integer, Reserva> cache;
+
+    public GestorReservas() {
+        cache = new HashMap<>();
+    }
 
     @Override
     public boolean guardar(Reserva item) throws PersistenciaException, LibreriaException, DatosInvalidosException {
@@ -33,15 +38,6 @@ public class GestorReservas implements IGestor<Reserva, Integer> {
         Reserva reserva = ConexionReserva.buscarReserva(integer);
         cache.put(reserva.getId(),reserva);
         return reserva;
-    }
-
-    @Override
-    public ArrayList<Reserva> listarTodos() {
-        ArrayList<Reserva> reservas = new ArrayList<>();
-        for (Map.Entry<Integer, Reserva> entry : cache.entrySet()){
-            reservas.add(entry.getValue());
-        }
-        return reservas;
     }
 
     @Override

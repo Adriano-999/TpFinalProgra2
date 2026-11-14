@@ -54,6 +54,30 @@ public class ConexionUsuario {
         }
     }
 
+    public static boolean modificarUsuario(Usuario usuario, String nombreUsuario) throws PersistenciaException, LibreriaException, NoEncontradoException
+    {
+        String query = "UPDATE usuarios SET usuario = ?, contrasenia = ?, tipo_usuario = ? WHERE usuario = ?";
+        try(Connection con = Conexion.abrir())
+        {
+            checkTabla(con);
+            PreparedStatement ps = con.prepareStatement(query);
+            ps.setString(1, usuario.getUsuario());
+            ps.setString(2, usuario.getContrasenia());
+            ps.setString(3, usuario.getTipo_usuario().name());
+            ps.setString(4, nombreUsuario);
+            if(ps.executeUpdate() == 0)
+            {
+                throw new NoEncontradoException();
+            }
+            ps.close();
+            Conexion.cerrar();
+            return true;
+        }catch(SQLException e)
+        {
+            throw new PersistenciaException(3);
+        }
+    }
+
     public static Usuario buscarUsuario(String usuario)
             throws PersistenciaException, LibreriaException, NoEncontradoException {
 
