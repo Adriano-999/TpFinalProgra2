@@ -5,6 +5,7 @@ import Model.Usuario;
 import Enum.*;
 import Model.GestorHabitaciones;
 
+import java.sql.SQLOutput;
 import java.util.InputMismatchException;
 import java.util.Objects;
 import java.util.Scanner;
@@ -121,11 +122,93 @@ public class Main {
                                         if(encontrado == null){
                                             System.out.println("No existe un usuario con el nombre " + usuarioBuscado);
                                         } else{
-                                            System.out.println(encontrado);
+                                            System.out.println(encontrado.toString());
+                                            boolean regresar = false;
+                                            while(!regresar){
+                                                System.out.println("Opciones:");
+                                                System.out.println("1. Cambiar nombre.");
+                                                System.out.println("2. Cambiar contrasenia.");
+                                                System.out.println("3. Cambiar tipo.");
+                                                System.out.println("4. Eliminar usuario.");
+                                                System.out.println("5. Volver al menu anterior.");
+                                                int opcion = sc.nextInt();
+                                                sc.nextLine();
+
+                                                switch(opcion){
+                                                    case 1:
+                                                        System.out.println("Ingrese el nuevo nombre: ");
+                                                        String nombreNuevo = sc.nextLine();
+
+                                                        Usuario usuarioConNuevoNombre = new Usuario(encontrado.getId_usuario(), nombreNuevo,
+                                                                encontrado.getContrasenia(), encontrado.getTipo_usuario());
+
+                                                        if(ConexionUsuario.modificarUsuario(usuarioConNuevoNombre, encontrado.getUsuario())){
+                                                            encontrado = usuarioConNuevoNombre;
+                                                            System.out.println("Se logro el cambio de nombre a " + encontrado.getUsuario());
+                                                        } else{
+                                                            System.out.println("No se logro el cambio de nombre.");
+                                                        }
+                                                        break;
+                                                    case 2:
+                                                        System.out.println("Ingrese la nueva contrasenia: ");
+                                                        String contraseniaNueva = sc.nextLine();
+                                                        Usuario usuarioNuevaContrasenia = new Usuario(encontrado.getId_usuario(),
+                                                                encontrado.getUsuario(), contraseniaNueva, encontrado.getTipo_usuario());
+                                                        if(ConexionUsuario.modificarUsuario(usuarioNuevaContrasenia, encontrado.getUsuario())){
+                                                            encontrado = usuarioNuevaContrasenia;
+                                                            System.out.println("Se logro el cambio de contrasenia, la nueva contraseña es: " + encontrado.getContrasenia());
+                                                        } else{
+                                                            System.out.println("No se logro el cambio de usuario.");
+                                                        }
+                                                    case 3:
+                                                        System.out.println("Elija el nuevo tipo de usuario: ");
+                                                        System.out.println("1. Administrador");
+                                                        System.out.println("2. Conserje");
+                                                        int tipoEleccion = sc.nextInt();
+                                                        sc.nextLine();
+
+                                                        TipoUsuario tipoNuevo;
+                                                        if(tipoEleccion == 1){
+                                                            tipoNuevo = TipoUsuario.ADMINISTRADOR;
+                                                        } else if(tipoEleccion == 2){
+                                                            tipoNuevo = TipoUsuario.CONSERJE;
+                                                        } else{
+                                                            throw new DatosInvalidosException();
+                                                        }
+
+                                                        Usuario usuarioConTipoActualizado = new Usuario(encontrado.getId_usuario(), encontrado.getUsuario()
+                                                                ,encontrado.getContrasenia(), tipoNuevo);
+                                                        if(ConexionUsuario.modificarUsuario(usuarioConTipoActualizado, encontrado.getUsuario())){
+                                                            encontrado = usuarioConTipoActualizado;
+                                                            System.out.println("Se logro el cambio. " + encontrado.getUsuario() + " ahora es de tipo: " + encontrado.getTipo_usuario());
+                                                        } else{
+                                                            System.out.println("No se logro realizar el cambio.");
+                                                        }
+                                                    case 4:
+                                                        System.out.println("Confirme si desea eliminar al usuario: " + encontrado.getUsuario());
+                                                        System.out.println("1. Confirmar");
+                                                        System.out.println("1. Cancelar");
+                                                        int confirmar = sc.nextInt();
+                                                        sc.nextLine();
+                                                        if (confirmar == 1) {
+                                                            ConexionUsuario.eliminarUsuario(encontrado.getId_usuario());
+                                                            System.out.println("Se elimino al usuario " + encontrado.getUsuario());
+                                                            regresar = true;
+                                                        } else{
+                                                            System.out.println("No se elimino al usuario.");
+                                                        }
+                                                        break;
+                                                    case 5:
+                                                        regresar = true;
+                                                        break;
+
+                                                    default:
+                                                        throw new DatosInvalidosException();
+                                                }
+                                            }
                                         }
                                         break;
                                     case 3:
-                                        //sin terminar
                                         System.out.println("Ingrese el numero de la habitacion: ");
                                         int numHabitacion = sc.nextInt();
                                         sc.nextLine();
@@ -133,8 +216,13 @@ public class Main {
                                         double precioXDia = sc.nextDouble();
                                         sc.nextLine();
 
+                                        gestorHabitaciones.listarDisponibles();
+                                        gestorHabitaciones.listarOcupadas();
+                                        gestorHabitaciones.listarFueraDeServicio();
+
                                         Habitacion nuevaHabitacion = new Habitacion(numHabitacion, precioXDia);
                                         if(gestorHabitaciones.guardar(nuevaHabitacion)){
+                                            gestorHabitaciones.listarDisponibles();
                                             System.out.println("Se creo correctamente la habitacion numero "
                                                     + nuevaHabitacion.getNumeroHabitacion() + " con el precio por dia establecido en: " + nuevaHabitacion.getPrecioPorDia());
                                         } else{
