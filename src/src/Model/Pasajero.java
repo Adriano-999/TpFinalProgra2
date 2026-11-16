@@ -1,4 +1,5 @@
 package Model;
+import Exception.DatosInvalidosException;
 
 public class Pasajero {
     private String dni;
@@ -11,6 +12,17 @@ public class Pasajero {
         this.nombre = nombre;
         this.origen = origen;
         this.domicilio = domicilio;
+    }
+
+    public static boolean validarPasajero(Pasajero pasajero) throws DatosInvalidosException {
+        StringBuilder stringBuilder = new StringBuilder(pasajero.getDni());
+
+        for (int i = 0; i < stringBuilder.length(); i++) {
+            if (!(stringBuilder.charAt(i) == '0' || stringBuilder.charAt(i) == '1' || stringBuilder.charAt(i) == '2' || stringBuilder.charAt(i) == '3' || stringBuilder.charAt(i) == '4' || stringBuilder.charAt(i) == '5' || stringBuilder.charAt(i) == '6' ||stringBuilder.charAt(i) == '7' || stringBuilder.charAt(i) == '8' || stringBuilder.charAt(i) == '9')){
+              throw new DatosInvalidosException();
+            }
+        }
+        return true;
     }
 
     public String getDni() {

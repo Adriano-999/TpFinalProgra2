@@ -1,9 +1,7 @@
 import Exception.*;
+import Model.*;
 import Model.BDD.ConexionUsuario;
-import Model.Habitacion;
-import Model.Usuario;
 import Enum.*;
-import Model.GestorHabitaciones;
 
 import java.sql.SQLOutput;
 import java.util.InputMismatchException;
@@ -18,6 +16,8 @@ public class Main {
         Scanner sc = new Scanner(System.in);
         Usuario usuario = null;
         GestorHabitaciones gestorHabitaciones = new GestorHabitaciones();
+        GestorPasajeros gestorPasajeros = new GestorPasajeros();
+        GestorReservas gestorReservas = new GestorReservas();
         while (!end) {
             try {
                 if (Objects.isNull(usuario)) {
@@ -66,6 +66,11 @@ public class Main {
                                         String nuevoOrigen = sc.nextLine();
                                         System.out.println("Ingrese domicilio: ");
                                         String nuevoDomicilio= sc.nextLine();
+                                        Pasajero nuevoPasajero = new Pasajero(nuevoDNI,nuevoNombre,nuevoOrigen,nuevoDomicilio);
+
+                                        Pasajero.validarPasajero(nuevoPasajero);
+
+                                        gestorPasajeros.guardar(nuevoPasajero);
 
                                         break;
                                     case 2:
