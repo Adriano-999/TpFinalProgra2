@@ -163,7 +163,14 @@ public class Main {
                                         System.out.println("1: Asignar como fuera de servicio"); // Deja introducir un mensaje como motivo, si la habitacion ya esta en ese estado en vez dice: "1: Asignar como disponible"
                                         System.out.println("2: Selecionar una reserva"); // se listan las reservas relacionadas y una vez selecionada se dan las mismas opciones que antes para la reserva.
                                         System.out.println("3: Volver al menu anterior");
-
+                                        int opcion = sc.nextInt();
+                                        switch(opcion)
+                                        {
+                                            case 1:
+                                                encontrada.setHabitacionEstado(HabitacionEstado.FUERA_DE_SERVICIO);
+                                                gestorHabitaciones.guardar(encontrada);
+                                                System.out.println("La habitacion " + encontrada.getNumeroHabitacion() + " ha sido dada de fuera de servicio");
+                                        }
 
                                         break;
                                     case 9:
