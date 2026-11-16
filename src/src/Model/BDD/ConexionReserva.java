@@ -70,6 +70,36 @@ public class ConexionReserva {
         }
     }
 
+    public static ArrayList<Reserva> buscarReservasPorHabitacion(int habitacion_id) throws LibreriaException,PersistenciaException, NoEncontradoException {
+        try {
+            Connection connection = Conexion.abrir();
+            checkTabla(connection);
+            Statement st = connection.createStatement();
+            ResultSet resultSet = st.executeQuery("Select * from reservas where id_habitacion="+habitacion_id+";");
+            ArrayList<Reserva> reservas = new ArrayList<>();
+            while (resultSet.next()){
+                Reserva reserva = new Reserva(
+                        resultSet.getInt("id_pasajero"),
+                        resultSet.getInt("id_habitacion"),
+                        resultSet.getDate("fecha_inicio"),
+                        resultSet.getInt("duracion"),
+                        resultSet.getInt("id_reserva")
+                );
+                reservas.add(reserva);
+            }
+            resultSet.close();
+            st.close();
+            Conexion.cerrar();
+            if (reservas.isEmpty()){
+                throw new NoEncontradoException();
+            } else {
+                return reservas;
+            }
+        } catch (SQLException e) {
+            throw new PersistenciaException(4);
+        }
+    }
+
 
 
     public static boolean guardarReserva(Reserva reserva) throws LibreriaException,PersistenciaException{
