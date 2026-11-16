@@ -1,6 +1,7 @@
 CREATE DATABASE IF NOT EXISTS 2026_C7_Feliziani_Benitez_Raimondo_TP_Final_Progra
     CHARACTER SET utf8mb4
     COLLATE utf8mb4_0900_ai_ci;
+use 2026_C7_Feliziani_Benitez_Raimondo_TP_Final_Progra;
 
 create table if not exists usuarios (
     id_usuario int auto_increment primary key not null ,
