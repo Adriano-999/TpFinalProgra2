@@ -1,7 +1,7 @@
 package Model.BDD;
 
 import java.sql.*;
-import java.util.HashSet;
+import java.util.ArrayList;
 
 import Exception.LibreriaException;
 import Exception.PersistenciaException;
@@ -131,12 +131,12 @@ public class ConexionUsuario {
         }
     }
 
-    public static HashSet<Usuario> listarUsuarios()
+    public static ArrayList<Usuario> buscarUsuarios(String nombre)
             throws PersistenciaException, LibreriaException, NoEncontradoException {
 
-        HashSet<Usuario> usuarios = new HashSet<>();
+        ArrayList<Usuario> usuarios = new ArrayList<>();
 
-        String query = "SELECT * FROM usuarios";
+        String query = "SELECT * FROM usuarios where usuario like '%"+nombre+"%'";
 
         try (Connection con = Conexion.abrir();
              PreparedStatement ps = con.prepareStatement(query);
@@ -172,7 +172,7 @@ public class ConexionUsuario {
                     "id_usuario int autoincrement primary key not null , " +
                     "usuario varchar(20) unique not null, " +
                     "contrasenia varchar(20) not null, " +
-                    "tipo_usuario varchar(20) not null;");
+                    "tipo_usuario varchar(20) not null);");
             st.execute("INSERT INTO usuarios (usuario,contrasenia,tipo_usuario) " +
                             "SELECT 'admin', 'admin', 'ADMINISTRADOR'  " +
                             "WHERE NOT EXISTS (SELECT * FROM usuarios);");

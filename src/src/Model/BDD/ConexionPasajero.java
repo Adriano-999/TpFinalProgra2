@@ -206,7 +206,7 @@ public class ConexionPasajero {
                     "dni varchar(10) not null unique, " +
                     "nombre varchar(20) not null, " +
                     "origen varchar(20) not null, " +
-                    "domicilio varchar(20) not null;");
+                    "domicilio varchar(20) not null);");
             st.close();
         } catch (SQLException e) {
             throw new PersistenciaException(2);
