@@ -157,7 +157,9 @@ public class ConexionUsuario {
             rs.close();
             ps.close();
             Conexion.cerrar();
-
+            if (usuarios.isEmpty()){
+                throw new NoEncontradoException();
+            }
             return usuarios;
 
         } catch (SQLException e) {
