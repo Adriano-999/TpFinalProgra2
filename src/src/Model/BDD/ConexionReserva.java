@@ -21,6 +21,7 @@ public class ConexionReserva {
                         resultSet.getInt("id_pasajero"),
                         resultSet.getInt("id_habitacion"),
                         resultSet.getDate("fecha_inicio"),
+                        resultSet.getInt("duracion"),
                         resultSet.getInt("id_reserva")
                 );
                 resultSet.close();
@@ -51,6 +52,7 @@ public class ConexionReserva {
                         resultSet.getInt("id_pasajero"),
                         resultSet.getInt("id_habitacion"),
                         resultSet.getDate("fecha_inicio"),
+                        resultSet.getInt("duracion"),
                         resultSet.getInt("id_reserva")
                 );
                 reservas.add(reserva);
@@ -87,20 +89,23 @@ public class ConexionReserva {
                         "update reservas " +
                                 "set id_pasajero = ? , " +
                                 "id_habitacion = ? , " +
-                                "fecha_inicio = ? " +
+                                "fecha_inicio = ?, " +
+                                "duracion = ? " +
                                 "where id_reserva=?;");
                 prepSt.setInt(1,reserva.getPasajero_id());
                 prepSt.setInt(2,reserva.getHabitacion_id());
                 prepSt.setDate(3,reserva.getFechaInicio());
-                prepSt.setInt(4,reserva.getId());
+                prepSt.setInt(4,reserva.getDuracion());
+                prepSt.setInt(5,reserva.getId());
                 prepSt.execute();
                 prepSt.close();
             }else{
                 Statement st = connection.createStatement();
                 st.execute(
-                        "INSERT INTO reservas (id_pasajero, id_habitacion, fecha_inicio) VALUES ("+
+                        "INSERT INTO reservas (id_pasajero, id_habitacion, duracion, fecha_inicio) VALUES ("+
                                 reserva.getPasajero_id()+","+
                                 reserva.getHabitacion_id()+","+
+                                reserva.getDuracion()+","+
                                 reserva.getFechaInicio()+");"
                 );
                 st.close();
@@ -136,6 +141,7 @@ public class ConexionReserva {
             st.execute("create table if not exists reservas ( " +
                     "id_reserva int auto_increment primary key not null , " +
                     "fecha_inicio date, " +
+                    "duracion int, " +
                     "id_pasajero int, " +
                     "id_habitacion int, " +
                     "FOREIGN KEY (id_pasajero) REFERENCES pasajeros(id_pasajero), " +

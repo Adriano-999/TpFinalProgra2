@@ -23,7 +23,11 @@ public class GestorPasajeros implements IGestor<Pasajero,String> {
         } else {
             cache.put(item.getDni(),item);
         }
-        ConexionPasajero.guardarPasajero(item);
+        try {
+            ConexionPasajero.modificarPasajero(item, item.getDni());
+        } catch (NoEncontradoException e) {
+            ConexionPasajero.guardarPasajero(item);
+        }
         return true;
     }
 
@@ -39,9 +43,7 @@ public class GestorPasajeros implements IGestor<Pasajero,String> {
 
     @Override
     public boolean eliminar(String s) throws PersistenciaException, NoEncontradoException, LibreriaException {
-        if (cache.containsKey(s)){
-            cache.remove(s);
-        }
+        cache.remove(s);
         ConexionPasajero.eliminarPasajero(s);
         return true;
     }

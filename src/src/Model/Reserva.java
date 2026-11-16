@@ -6,13 +6,19 @@ public class Reserva {
     private int pasajero_id;
     private int habitacion_id;
     private Date fechaInicio;
+    private int duracion;
     private int id;
 
-    public Reserva(int pasajero_id, int habitacion_id, Date fechaInicio, int id) {
+    public Reserva(int pasajero_id, int habitacion_id, Date fechaInicio, int duracion, int id) {
         this.pasajero_id = pasajero_id;
         this.habitacion_id = habitacion_id;
         this.fechaInicio = fechaInicio;
+        this.duracion = duracion;
         this.id = id;
+    }
+
+    public int getDuracion() {
+        return duracion;
     }
 
     public int getPasajero_id() {

@@ -30,6 +30,7 @@ create table if not exists habitaciones (
 create table if not exists reservas (
     id_reserva int auto_increment primary key not null ,
     fecha_inicio date,
+    duracion int,
     id_pasajero int,
     id_habitacion int,
     FOREIGN KEY (id_pasajero) REFERENCES pasajeros(id_pasajero),
