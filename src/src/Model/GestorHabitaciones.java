@@ -22,9 +22,6 @@ public class GestorHabitaciones implements IGestor<Habitacion, Integer> {
             throw new DatosInvalidosException();
         }
         item.validarHabitacion(item);
-        if(item.getIdHabitacion() <= 0 && buscarHabitacionPorNumero(item.getNumeroHabitacion()) != null){
-            throw new DatosInvalidosException();
-        }
         boolean guardada = ConexionHabitacion.guardarHabitacion(item);
         if(guardada && item.getIdHabitacion() > 0){
             cache.put(item.getIdHabitacion(), item);

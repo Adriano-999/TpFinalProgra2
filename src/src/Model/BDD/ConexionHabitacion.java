@@ -140,7 +140,7 @@ public class ConexionHabitacion {
             Statement st = connection.createStatement();
             st.execute("create table if not exists habitaciones ( " +
                     "id_habitacion int auto_increment primary key not null , " +
-                    "numero_habitacion int, " +
+                    "numero_habitacion int unique, " +
                     "precio_por_dia double, " +
                     "habitacion_estado varchar(20)), " +
                     "motivo varchar(50);");

@@ -57,9 +57,15 @@ public class Main {
                                 sc.nextLine();
 
                                 switch (choice) {
-                                    case 0:
-                                        break;
                                     case 1:
+                                        System.out.println("Ingrese el nombre del pasajero: ");
+                                        String nuevoNombre = sc.nextLine();
+                                        System.out.println("Ingrese DNI: ");
+                                        String nuevoDNI = sc.nextLine();
+                                        System.out.println("Ingrese nacionalidad: ");
+                                        String nuevoOrigen = sc.nextLine();
+                                        System.out.println("Ingrese domicilio: ");
+                                        String nuevoDomicilio= sc.nextLine();
 
                                         break;
                                     case 2:
@@ -75,19 +81,13 @@ public class Main {
                             case ADMINISTRADOR -> {
                                 System.out.println("Menu Admin:"); // usuario inicial/Admins
                                 System.out.println("1: Crear nuevo usuario");
-                                System.out.println("2: Buscar usuario");// por nombre? se listan los resultados y una vez selecionado se daran mas opciones
-                                    // System.out.println("1: Cambiar nombre"); // para editar dato ingresado incorectamente
-                                    // System.out.println("2: Cambiar contrasenia"); // para editar dato ingresado incorectamente
-                                    // System.out.println("3: Cambiar tipo"); // para editar dato ingresado incorectamente
-                                    // System.out.println("4: Volver al menu anterior");
+                                System.out.println("2: Buscar usuario");// por nombre. se listan los resultados y una vez selecionado se daran mas opciones
                                 System.out.println("3: Crear nueva habitacion");
-                                // despues mismas opciones que conserje? pero con un par mas de opciones en los menus despues de selccionar? como borrar pasajero o habitacion
+                                // despues mismas opciones que conserje, pero con un par mas de opciones en los menus despues de selccionar, como borrar pasajero o habitacion
                                 System.out.println("9: Cerrar");
                                 choice = sc.nextInt();
                                 sc.nextLine();
                                 switch (choice) {
-                                    case 0:
-                                        break;
                                     case 1:
                                         System.out.println("Ingrese el nombre de usuario: ");
                                         String nuevoUser = sc.nextLine();
@@ -125,6 +125,10 @@ public class Main {
                                             System.out.println(encontrado.toString());
                                             boolean regresar = false;
                                             while(!regresar){
+                                                // System.out.println("1: Cambiar nombre"); // para editar dato ingresado incorectamente
+                                                // System.out.println("2: Cambiar contrasenia"); // para editar dato ingresado incorectamente
+                                                // System.out.println("3: Cambiar tipo"); // para editar dato ingresado incorectamente
+                                                // System.out.println("4: Volver al menu anterior");
                                                 System.out.println("Opciones:");
                                                 System.out.println("1. Cambiar nombre.");
                                                 System.out.println("2. Cambiar contrasenia.");
@@ -215,10 +219,6 @@ public class Main {
                                         System.out.println("Ingrese el precio por dia: ");
                                         double precioXDia = sc.nextDouble();
                                         sc.nextLine();
-
-                                        gestorHabitaciones.listarDisponibles();
-                                        gestorHabitaciones.listarOcupadas();
-                                        gestorHabitaciones.listarFueraDeServicio();
 
                                         Habitacion nuevaHabitacion = new Habitacion(numHabitacion, precioXDia);
                                         if(gestorHabitaciones.guardar(nuevaHabitacion)){
