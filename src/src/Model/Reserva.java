@@ -43,6 +43,7 @@ public class Reserva {
                 "pasajero=" + pasajero_id +
                 ", habitacion=" + habitacion_id +
                 ", fechaInicio=" + fechaInicio +
+                ", duracion=" + duracion +
                 ", id=" + id +
                 '}';
     }

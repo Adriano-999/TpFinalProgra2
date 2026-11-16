@@ -39,6 +39,35 @@ public class ConexionHabitacion {
         }
     }
 
+    public static Habitacion buscarHabitacionPorNumero(int num) throws LibreriaException,PersistenciaException, NoEncontradoException {
+        try {
+            Connection connection = Conexion.abrir();
+            checkTabla(connection);
+            Statement st = connection.createStatement();
+            ResultSet resultSet = st.executeQuery("Select * from habitaciones where numero_habitacion="+num+";");
+            if (resultSet.next()){
+                Habitacion habitacion = new Habitacion(
+                        resultSet.getInt("id_habitacion"),
+                        resultSet.getInt("numero_habitacion"),
+                        resultSet.getDouble("precio_por_dia"),
+                        HabitacionEstado.valueOf(resultSet.getString("habitacion_estado")),
+                        resultSet.getString("motivo")
+                );
+                resultSet.close();
+                st.close();
+                Conexion.cerrar();
+                return habitacion;
+            } else {
+                resultSet.close();
+                st.close();
+                Conexion.cerrar();
+                throw new NoEncontradoException();
+            }
+        } catch (SQLException e) {
+            throw new PersistenciaException(4);
+        }
+    }
+
 
     public static ArrayList<Habitacion> buscarHabitacionesPorEstado(HabitacionEstado habitacionEstado) throws LibreriaException,PersistenciaException, NoEncontradoException {
         try {

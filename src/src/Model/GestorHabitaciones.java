@@ -8,6 +8,7 @@ import Enum.*;
 import java.util.HashMap;
 import java.util.ArrayList;
 import java.util.Map;
+import java.util.Objects;
 
 public class GestorHabitaciones implements IGestor<Habitacion, Integer> {
     private Map<Integer, Habitacion> cache;
@@ -56,12 +57,16 @@ public class GestorHabitaciones implements IGestor<Habitacion, Integer> {
         return eliminada;
     }
 
-    public Habitacion buscarHabitacionPorNumero(int numero){
+    public Habitacion buscarHabitacionPorNumero(int numero) throws PersistenciaException, NoEncontradoException, LibreriaException {
      Habitacion found = null;
      for(Habitacion habitacion : cache.values()){
          if(habitacion.getNumeroHabitacion() == numero){
              found = habitacion;
          }
+     }
+     if (Objects.isNull(found)){
+         found = ConexionHabitacion.buscarHabitacionPorNumero(numero);
+         cache.put(found.getIdHabitacion(),found);
      }
      return found;
     }

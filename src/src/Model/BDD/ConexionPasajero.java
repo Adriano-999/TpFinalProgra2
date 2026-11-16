@@ -162,7 +162,7 @@ public class ConexionPasajero {
         }
         catch (SQLException e)
         {
-            throw new PersistenciaException(3);
+            throw new PersistenciaException(4);
         }
     }
 

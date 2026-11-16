@@ -1,3 +1,4 @@
+drop database 2026_C7_Feliziani_Benitez_Raimondo_TP_Final_Progra;
 CREATE DATABASE IF NOT EXISTS 2026_C7_Feliziani_Benitez_Raimondo_TP_Final_Progra
     CHARACTER SET utf8mb4
     COLLATE utf8mb4_0900_ai_ci;
@@ -60,10 +61,10 @@ INSERT INTO habitaciones (numero_habitacion, precio_por_dia, habitacion_estado, 
     (105, 25000, 'DISPONIBLE', ''),
     (106, 22000, 'OCUPADA', '');
 
-INSERT INTO reservas (fecha_inicio, id_pasajero, id_habitacion) VALUES
-    ('2026-11-17', 1, 2),
-    ('2026-11-18', 2, 4),
-    ('2026-11-19', 3, 1),
-    ('2026-11-20', 4, 3),
-    ('2026-11-21', 5, 6),
-    ('2026-11-22', 6, 5);
+INSERT INTO reservas (fecha_inicio, id_pasajero, duracion, id_habitacion) VALUES
+    ('2026-11-17', 1,3, 2),
+    ('2026-11-18', 2,2, 4),
+    ('2026-11-19', 3,1, 1),
+    ('2026-11-20', 4,3, 3),
+    ('2026-11-21', 5,2, 6),
+    ('2026-11-22', 6,1, 5);

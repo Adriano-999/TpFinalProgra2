@@ -1,8 +1,10 @@
 import Exception.*;
 import Model.*;
+import Model.BDD.ConexionPasajero;
 import Model.BDD.ConexionUsuario;
 import Enum.*;
 
+import java.sql.Date;
 import java.util.*;
 
 public class Main {
@@ -31,25 +33,8 @@ public class Main {
                                 System.out.println("Menu Empleado:"); // conserjes y recepcionistas
                                 System.out.println("1: Aniadir nuevo pasajero");
                                 System.out.println("2: Buscar pasajero por nombre"); // se listan los resultados y una vez selecionado se daran mas opciones:
-                                    // System.out.println("1: Crear nueva reserva"); // asociada al pasajero seleccionado
-                                        // se verifican los valores ingresados (la fecha inicial es en la fecha actual o despues, y la habitacion se seleciona de una lista de habitaciones disponibles durante la duracion de esta reserva)
-                                    // System.out.println("2: Cambiar DNI"); // para editar dato ingresado incorectamente
-                                    // System.out.println("3: Cambiar nombre"); // para editar dato ingresado incorectamente
-                                    // System.out.println("4: Cambiar origen"); // para editar dato ingresado incorectamente
-                                    // System.out.println("5: Cambiar domicilio"); // para editar dato ingresado incorectamente
-                                    // System.out.println("6: Volver al menu anterior");
-                                System.out.println("3: Buscar reserva por fecha");// se listan los resultados en el rango de fechas dado y una vez selecionada se daran mas opciones:
-                                    // System.out.println("1: Crear nueva reserva"); // asociada al pasajero seleccionado
-                                    // System.out.println("2: Cambiar fecha inicio"); // para editar dato ingresado incorectamente
-                                    // System.out.println("3: Cambiar duracion"); // para editar dato ingresado incorectamente
-                                    // System.out.println("4: Cambiar habitacion asignada"); // para editar dato ingresado incorectamente
-                                    // System.out.println("5: Borrar reserva"); // para editar dato ingresado incorectamente
-                                    // System.out.println("6: Volver al menu anterior");
-                                System.out.println("4: Buscar habitacion por numero"); // muestra la habitacion, su estado(en caso de no ser fuera de servicio el mismo es calculado automaticamente con la fecha actual y las reservas (si una de las reservas de esta habitacion tiene su duracion en el momento actual entonces la misma esta ocupada) y sus reservas asignadas
-                                    // System.out.println("1: Asignar como fuera de servicio"); // Deja introducir un mensaje como motivo, si la habitacion ya esta en ese estado en vez dice: "1: Asignar como disponible"
-                                    // System.out.println("2: Selecionar una reserva"); // se listan las reservas relacionadas y una vez selecionada se dan las mismas opciones que antes para la reserva.
-                                    // System.out.println("3: Volver al menu anterior");
-                                System.out.println("5: Cerrar");
+                                System.out.println("3: Buscar habitacion por numero"); // muestra la habitacion, su estado(en caso de no ser fuera de servicio el mismo es calculado automaticamente con la fecha actual y las reservas (si una de las reservas de esta habitacion tiene su duracion en el momento actual entonces la misma esta ocupada) y sus reservas asignadas
+                                System.out.println("4: Cerrar");
                                 choice = sc.nextInt();
                                 sc.nextLine();
 
@@ -64,13 +49,121 @@ public class Main {
                                         System.out.println("Ingrese domicilio: ");
                                         String nuevoDomicilio= sc.nextLine();
                                         Pasajero nuevoPasajero = new Pasajero(nuevoDNI,nuevoNombre,nuevoOrigen,nuevoDomicilio);
-
                                         Pasajero.validarPasajero(nuevoPasajero);
-
                                         gestorPasajeros.guardar(nuevoPasajero);
-
                                         break;
                                     case 2:
+                                        System.out.println("Ingrese el nombre del pasajero a buscar: ");
+                                        String pasajeroBuscado = sc.nextLine();
+                                        ArrayList<Pasajero> pasajeros = gestorPasajeros.buscarPorNombre(pasajeroBuscado);
+                                        for (Pasajero item : pasajeros){
+                                            System.out.println((pasajeros.indexOf(item)+1)+") "+item);
+                                        }
+                                        int encontrar = sc.nextInt();
+                                        sc.nextLine();
+                                        if (encontrar < 0 || encontrar > pasajeros.size()){
+                                            throw new DatosInvalidosException();
+                                        }
+                                        Pasajero encontrado = pasajeros.get(encontrar-1);
+                                        boolean regresar = false;
+                                        while(!regresar) {
+                                            encontrado = gestorPasajeros.buscarPorId(encontrado.getDni());
+                                            System.out.println(encontrado);
+                                            System.out.println("1: Crear nueva reserva"); // asociada al pasajero seleccionado
+                                            System.out.println("2: Cambiar DNI"); // para editar dato ingresado incorectamente
+                                            System.out.println("3: Cambiar nombre"); // para editar dato ingresado incorectamente
+                                            System.out.println("4: Cambiar origen"); // para editar dato ingresado incorectamente
+                                            System.out.println("5: Cambiar domicilio"); // para editar dato ingresado incorectamente
+                                            System.out.println("6: Listar reservas"); // se listan los resultados y una vez selecionada se daran mas opciones:
+                                            System.out.println("7: Volver al menu anterior");
+                                            int opcion = sc.nextInt();
+                                            sc.nextLine();
+
+                                            switch (opcion) {
+                                                case 1:
+                                                    System.out.println("Ingrese el numero de habitacion: ");
+                                                    int nuevoNumero = sc.nextInt();
+                                                    sc.nextLine();
+                                                    System.out.println("Ingrese la fecha de inicio (en formato yyyy-[m]m-[d]d): ");
+                                                    String nuevaFecha = sc.nextLine();
+                                                    Date nuevaDate = Date.valueOf(nuevaFecha);
+                                                    System.out.println("Duracion de la estadia: ");
+                                                    int nuevaDuracion = sc.nextInt();
+                                                    sc.nextLine();
+                                                    Reserva nuevaReserva = new Reserva(
+                                                            ConexionPasajero.obtenerId(encontrado.getDni()),
+                                                            gestorHabitaciones.buscarHabitacionPorNumero(nuevoNumero).getIdHabitacion(),
+                                                            nuevaDate,
+                                                            nuevaDuracion,
+                                                            -1);
+                                                    gestorReservas.guardar(nuevaReserva);
+
+                                                    break;
+                                                case 2:
+                                                    System.out.println("Ingrese el nuevo DNI: ");
+                                                    String dniNuevo = sc.nextLine();
+                                                    Pasajero pasajeroConDNI = new Pasajero(dniNuevo,encontrado.getNombre(),encontrado.getOrigen(),encontrado.getDomicilio());
+                                                    ConexionPasajero.modificarPasajero(pasajeroConDNI,encontrado.getDni());
+                                                    encontrado = pasajeroConDNI;
+                                                    break;
+                                                case 3:
+                                                    System.out.println("Ingrese el nuevo nombre: ");
+                                                    String nombreNuevo = sc.nextLine();
+                                                    Pasajero pasajeroConNombre = new Pasajero(encontrado.getDni(),nombreNuevo,encontrado.getOrigen(),encontrado.getDomicilio());
+                                                    gestorPasajeros.guardar(pasajeroConNombre);
+                                                    break;
+                                                case 4:
+                                                    System.out.println("Ingrese el nuevo origen: ");
+                                                    String origenNuevo = sc.nextLine();
+                                                    Pasajero pasajeroConOrigen = new Pasajero(encontrado.getDni(), encontrado.getNombre(), origenNuevo,encontrado.getDomicilio());
+                                                    gestorPasajeros.guardar(pasajeroConOrigen);
+                                                    break;
+                                                case 5:
+                                                    System.out.println("Ingrese el nuevo domicilio: ");
+                                                    String domiciliouevo = sc.nextLine();
+                                                    Pasajero pasajeroConDomicilio = new Pasajero(encontrado.getDni(), encontrado.getNombre(), encontrado.getOrigen(), domiciliouevo);
+                                                    gestorPasajeros.guardar(pasajeroConDomicilio);
+                                                    break;
+                                                case 6:
+                                                    ArrayList<Reserva> reservas = gestorReservas.buscarReservasPorPasajero(encontrado);
+                                                    for (Reserva item : reservas){
+                                                        System.out.println((reservas.indexOf(item)+1)+") "+item);
+                                                    }
+                                                    encontrar = sc.nextInt();
+                                                    sc.nextLine();
+                                                    if (encontrar < 0 || encontrar > reservas.size()){
+                                                        throw new DatosInvalidosException();
+                                                    }
+                                                    Reserva eleguida = reservas.get(encontrar-1);
+                                                    boolean regresar2 = false;
+                                                    while(!regresar2) {
+                                                        encontrado = gestorPasajeros.buscarPorId(encontrado.getDni());
+                                                        System.out.println("1: Cambiar fecha inicio"); // para editar dato ingresado incorectamente
+                                                        System.out.println("2: Cambiar duracion"); // para editar dato ingresado incorectamente
+                                                        System.out.println("3: Cambiar habitacion asignada"); // para editar dato ingresado incorectamente
+                                                        System.out.println("4: Borrar reserva"); // para editar dato ingresado incorectamente
+                                                        System.out.println("5: Volver al menu anterior");
+
+                                                    }
+                                                    break;
+                                                case 7:
+                                                    regresar = true;
+                                                    break;
+                                                default:
+                                                    throw new DatosInvalidosException();
+                                            }
+                                        }
+                                        break;
+                                    case 3:
+                                        System.out.println("Ingrese el numero de habitacion: ");
+                                        int nuevoNumero = sc.nextInt();
+                                        sc.nextLine();
+                                        Habitacion encontrada = gestorHabitaciones.buscarHabitacionPorNumero(nuevoNumero);
+                                        System.out.println(encontrada);
+                                        System.out.println("1: Asignar como fuera de servicio"); // Deja introducir un mensaje como motivo, si la habitacion ya esta en ese estado en vez dice: "1: Asignar como disponible"
+                                        System.out.println("2: Selecionar una reserva"); // se listan las reservas relacionadas y una vez selecionada se dan las mismas opciones que antes para la reserva.
+                                        System.out.println("3: Volver al menu anterior");
+
 
                                         break;
                                     case 9:
@@ -131,11 +224,9 @@ public class Main {
                                         }
                                         Usuario encontrado = usuarios.get(encontrar-1);
                                         boolean regresar = false;
+                                        System.out.println(encontrado);
                                         while(!regresar){
-                                            // System.out.println("1: Cambiar nombre"); // para editar dato ingresado incorectamente
-                                            // System.out.println("2: Cambiar contrasenia"); // para editar dato ingresado incorectamente
-                                            // System.out.println("3: Cambiar tipo"); // para editar dato ingresado incorectamente
-                                            // System.out.println("4: Volver al menu anterior");
+                                            encontrado = ConexionUsuario.buscarUsuario(encontrado.getUsuario());
                                             System.out.println(encontrado);
                                             System.out.println("Opciones:");
                                             System.out.println("1. Cambiar nombre.");
