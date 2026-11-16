@@ -169,7 +169,7 @@ public class ConexionUsuario {
         try {
             Statement st = connection.createStatement();
             st.execute("create table if not exists usuarios ( " +
-                    "id_usuario int autoincrement primary key not null , " +
+                    "id_usuario int auto_increment primary key not null , " +
                     "usuario varchar(20) unique not null, " +
                     "contrasenia varchar(20) not null, " +
                     "tipo_usuario varchar(20) not null);");
