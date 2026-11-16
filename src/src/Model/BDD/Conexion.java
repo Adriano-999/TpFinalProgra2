@@ -12,9 +12,9 @@ public class Conexion {
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
             String schema = "2026_C7_Feliziani_Benitez_Raimondo_TP_Final_Progra";
-            String IP = "172.16.1.64";
+            String IP = "localhost"; // facultad: 172.16.1.64 ana: localhost
             String port = "3306";
-            String usuario = "bdd1";
+            String usuario = "root"; // facultad: bdd1 ana: root
             String contrasenia = "bdd1";
             connection = DriverManager.getConnection("jdbc:mysql://"+IP+":"+port+"/"+schema,usuario,contrasenia);
             return connection;
