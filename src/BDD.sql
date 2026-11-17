@@ -34,8 +34,8 @@ create table if not exists reservas (
     duracion int,
     id_pasajero int,
     id_habitacion int,
-    FOREIGN KEY (id_pasajero) REFERENCES pasajeros(id_pasajero),
-    FOREIGN KEY (id_habitacion) REFERENCES habitaciones(id_habitacion));
+    FOREIGN KEY (id_pasajero) REFERENCES pasajeros(id_pasajero) on delete cascade,
+    FOREIGN KEY (id_habitacion) REFERENCES habitaciones(id_habitacion) on delete cascade);
 
 INSERT INTO usuarios (usuario, contrasenia, tipo_usuario) VALUES
     ('juan', 'juan123', 'CONSERJE'),
