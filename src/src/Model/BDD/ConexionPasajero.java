@@ -13,7 +13,7 @@ import Exception.NoEncontradoException;
 public class ConexionPasajero {
 
     public static boolean guardarPasajero(Pasajero pasajero) throws PersistenciaException, LibreriaException {
-        String query = "INSERT INTO pasajeros values(?,?,?,?)";
+        String query = "INSERT INTO pasajeros (dni, nombre, origen, domicilio) values(?,?,?,?)";
         try (Connection con = Conexion.abrir()) {
             checkTabla(con);
             PreparedStatement ps = con.prepareStatement(query);
@@ -25,7 +25,7 @@ public class ConexionPasajero {
             ps.close();
             return true;
         } catch (SQLException e) {
-            throw new PersistenciaException(3);
+            throw new PersistenciaException(e.getMessage());
         }
     }
 
