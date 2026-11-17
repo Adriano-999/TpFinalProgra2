@@ -130,20 +130,18 @@ public class ConexionReserva {
                 prepSt.execute();
                 prepSt.close();
             }else{
-                Statement st = connection.createStatement();
-                st.execute(
-                        "INSERT INTO reservas (id_pasajero, id_habitacion, duracion, fecha_inicio) VALUES ("+
-                                reserva.getPasajero_id()+","+
-                                reserva.getHabitacion_id()+","+
-                                reserva.getDuracion()+","+
-                                reserva.getFechaInicio()+");"
-                );
-                st.close();
+                PreparedStatement ps = connection.prepareStatement("INSERT INTO reservas (id_pasajero, id_habitacion, duracion, fecha_inicio) VALUES (?,?,?,?);");
+                ps.setInt(1,reserva.getPasajero_id());
+                ps.setInt(2,reserva.getHabitacion_id());
+                ps.setInt(3,reserva.getDuracion());
+                ps.setDate(4,reserva.getFechaInicio());
+                ps.execute();
+                ps.close();
             }
             Conexion.cerrar();
             return true;
         } catch (SQLException e) {
-            throw new PersistenciaException(3);
+            throw new PersistenciaException(e.getMessage());
         }
     }
 
