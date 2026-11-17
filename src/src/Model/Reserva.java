@@ -21,6 +21,22 @@ public class Reserva {
         return duracion;
     }
 
+    public void setPasajero_id(int pasajero_id) {
+        this.pasajero_id = pasajero_id;
+    }
+
+    public void setHabitacion_id(int habitacion_id) {
+        this.habitacion_id = habitacion_id;
+    }
+
+    public void setFechaInicio(Date fechaInicio) {
+        this.fechaInicio = fechaInicio;
+    }
+
+    public void setDuracion(int duracion) {
+        this.duracion = duracion;
+    }
+
     public int getPasajero_id() {
         return pasajero_id;
     }

@@ -59,4 +59,13 @@ public class GestorReservas implements IGestor<Reserva, Integer> {
         }
         return reservas;
         }
+    public ArrayList<Reserva> buscarReservasPorHabitacion(Habitacion habitacion) throws PersistenciaException, LibreriaException, NoEncontradoException
+    {
+        ArrayList<Reserva> reservas = ConexionReserva.buscarReservasPorPasajero(habitacion.getIdHabitacion());
+        for (Reserva r : reservas)
+        {
+            cache.put(r.getId(), r);
+        }
+        return reservas;
+    }
 }

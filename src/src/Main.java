@@ -33,7 +33,7 @@ public class Main {
                                 System.out.println("Menu Empleado:"); // conserjes y recepcionistas
                                 System.out.println("1: Aniadir nuevo pasajero");
                                 System.out.println("2: Buscar pasajero por nombre"); // se listan los resultados y una vez selecionado se daran mas opciones:
-                                System.out.println("3: Buscar habitacion por numero"); // muestra la habitacion, su estado(en caso de no ser fuera de servicio el mismo es calculado automaticamente con la fecha actual y las reservas (si una de las reservas de esta habitacion tiene su duracion en el momento actual entonces la misma esta ocupada) y sus reservas asignadas
+                                System.out.println("3: Buscar habitacion por numero"); // muestra la habitacion, y se daran mas opciones
                                 System.out.println("4: Cerrar");
                                 choice = sc.nextInt();
                                 sc.nextLine();
@@ -135,15 +135,46 @@ public class Main {
                                                         throw new DatosInvalidosException();
                                                     }
                                                     Reserva eleguida = reservas.get(encontrar-1);
-                                                    boolean regresar2 = false;
-                                                    while(!regresar2) {
-                                                        encontrado = gestorPasajeros.buscarPorId(encontrado.getDni());
+                                                    boolean regresarReserva = false;
+                                                    while(!regresarReserva) {
+                                                        eleguida = gestorReservas.buscarPorId(eleguida.getId());
                                                         System.out.println("1: Cambiar fecha inicio"); // para editar dato ingresado incorectamente
                                                         System.out.println("2: Cambiar duracion"); // para editar dato ingresado incorectamente
                                                         System.out.println("3: Cambiar habitacion asignada"); // para editar dato ingresado incorectamente
-                                                        System.out.println("4: Borrar reserva"); // para editar dato ingresado incorectamente
+                                                        System.out.println("4: Borrar reserva");
                                                         System.out.println("5: Volver al menu anterior");
-
+                                                        opcion = sc.nextInt();
+                                                        sc.nextLine();
+                                                        switch (opcion){
+                                                            case 1:
+                                                                System.out.println("Nueva fecha (en formato yyyy-[m]m-[d]d):");
+                                                                eleguida.setFechaInicio(Date.valueOf(sc.nextLine()));
+                                                                sc.nextLine();
+                                                                gestorReservas.guardar(eleguida);
+                                                                break;
+                                                            case 2:
+                                                                System.out.println("Nueva duracion en dias:");
+                                                                eleguida.setDuracion(sc.nextInt());
+                                                                sc.nextLine();
+                                                                gestorReservas.guardar(eleguida);
+                                                                break;
+                                                            case 3:
+                                                                System.out.println("Numero de habitacion:");
+                                                                Habitacion nuevaHabitacion = gestorHabitaciones.buscarHabitacionPorNumero(sc.nextInt());
+                                                                sc.nextLine();
+                                                                eleguida.setHabitacion_id(nuevaHabitacion.getIdHabitacion());
+                                                                gestorReservas.guardar(eleguida);
+                                                                break;
+                                                            case 4:
+                                                                gestorReservas.eliminar(eleguida.getId());
+                                                                regresarReserva = true;
+                                                                break;
+                                                            case 5:
+                                                                regresarReserva = true;
+                                                                break;
+                                                            default:
+                                                                throw new DatosInvalidosException();
+                                                        }
                                                     }
                                                     break;
                                                 case 7:
@@ -156,20 +187,115 @@ public class Main {
                                         break;
                                     case 3:
                                         System.out.println("Ingrese el numero de habitacion: ");
-                                        int nuevoNumero = sc.nextInt();
+                                        int encontrarHabitacion = sc.nextInt();
                                         sc.nextLine();
-                                        Habitacion encontrada = gestorHabitaciones.buscarHabitacionPorNumero(nuevoNumero);
-                                        System.out.println(encontrada);
-                                        System.out.println("1: Asignar como fuera de servicio"); // Deja introducir un mensaje como motivo, si la habitacion ya esta en ese estado en vez dice: "1: Asignar como disponible"
-                                        System.out.println("2: Selecionar una reserva"); // se listan las reservas relacionadas y una vez selecionada se dan las mismas opciones que antes para la reserva.
-                                        System.out.println("3: Volver al menu anterior");
-                                        int opcion = sc.nextInt();
-                                        switch(opcion)
-                                        {
-                                            case 1:
-                                                encontrada.setHabitacionEstado(HabitacionEstado.FUERA_DE_SERVICIO);
-                                                gestorHabitaciones.guardar(encontrada);
-                                                System.out.println("La habitacion " + encontrada.getNumeroHabitacion() + " ha sido dada de fuera de servicio");
+                                        boolean regresarHabitacion = false;
+                                        while(!regresarHabitacion) {
+                                            Habitacion encontrada = gestorHabitaciones.buscarHabitacionPorNumero(encontrarHabitacion);
+                                            System.out.println(encontrada);
+                                            if (encontrada.getHabitacionEstado() == HabitacionEstado.FUERA_DE_SERVICIO){
+                                                System.out.println("1: Asignar como fuera de servicio"); // Deja introducir un mensaje como motivo
+                                            } else {
+                                                System.out.println("1: Asignar como disponible o ocupada");
+                                            }
+                                            System.out.println("2: Selecionar una reserva"); // se listan las reservas relacionadas y una vez selecionada se dan las mismas opciones que antes para la reserva.
+                                            System.out.println("3: Volver al menu anterior");
+                                            int opcion = sc.nextInt();
+                                            sc.nextLine();
+                                            switch(opcion){
+                                                case 1:
+                                                    if (encontrada.getHabitacionEstado() == HabitacionEstado.FUERA_DE_SERVICIO){
+                                                        System.out.println("Describir motivo del estado:");
+                                                        String nuevoMotivo = sc.nextLine();
+                                                        encontrada.setMotivo(nuevoMotivo);
+                                                        encontrada.setHabitacionEstado(HabitacionEstado.FUERA_DE_SERVICIO);
+                                                        System.out.println("La habitacion " + encontrada.getNumeroHabitacion() + " ha sido dada de fuera de servicio");
+                                                    } else {
+                                                        System.out.println("1: Asignar como ocupada");
+                                                        System.out.println("2: Asignar como disponible");
+                                                        opcion = sc.nextInt();
+                                                        sc.nextLine();
+                                                        if (opcion == 1 || opcion == 2){
+                                                            if (opcion == 1){
+                                                                encontrada.setHabitacionEstado(HabitacionEstado.OCUPADA);
+                                                            } else {
+                                                                encontrada.setHabitacionEstado(HabitacionEstado.DISPONIBLE);
+                                                            }
+                                                        }else {
+                                                            throw new DatosInvalidosException();
+                                                        }
+                                                        encontrada.setHabitacionEstado(HabitacionEstado.DISPONIBLE);
+                                                    }
+                                                    gestorHabitaciones.guardar(encontrada);
+                                                    break;
+                                                case 2:
+                                                    ArrayList<Reserva> reservas = gestorReservas.buscarReservasPorHabitacion(encontrada);
+                                                    for (Reserva item : reservas){
+                                                        System.out.println((reservas.indexOf(item)+1)+") "+item);
+                                                    }
+                                                    encontrar = sc.nextInt();
+                                                    sc.nextLine();
+                                                    if (encontrar < 0 || encontrar > reservas.size()){
+                                                        throw new DatosInvalidosException();
+                                                    }
+                                                    Reserva eleguida = reservas.get(encontrar-1);
+                                                    boolean regresarReserva = false;
+                                                    while(!regresarReserva) {
+                                                        eleguida = gestorReservas.buscarPorId(eleguida.getId());
+                                                        System.out.println("1: Cambiar fecha inicio"); // para editar dato ingresado incorectamente
+                                                        System.out.println("2: Cambiar duracion"); // para editar dato ingresado incorectamente
+                                                        System.out.println("3: Cambiar pasajero asignado"); // para editar dato ingresado incorectamente
+                                                        System.out.println("4: Borrar reserva");
+                                                        System.out.println("5: Volver al menu anterior");
+                                                        opcion = sc.nextInt();
+                                                        sc.nextLine();
+                                                        switch (opcion){
+                                                            case 1:
+                                                                System.out.println("Nueva fecha (en formato yyyy-[m]m-[d]d):");
+                                                                eleguida.setFechaInicio(Date.valueOf(sc.nextLine()));
+                                                                sc.nextLine();
+                                                                gestorReservas.guardar(eleguida);
+                                                                break;
+                                                            case 2:
+                                                                System.out.println("Nueva duracion en dias:");
+                                                                eleguida.setDuracion(sc.nextInt());
+                                                                sc.nextLine();
+                                                                gestorReservas.guardar(eleguida);
+                                                                break;
+                                                            case 3:
+                                                                System.out.println("Ingrese el nombre del pasajero a buscar: ");
+                                                                pasajeroBuscado = sc.nextLine();
+                                                                pasajeros = gestorPasajeros.buscarPorNombre(pasajeroBuscado);
+                                                                for (Pasajero item : pasajeros){
+                                                                    System.out.println((pasajeros.indexOf(item)+1)+") "+item);
+                                                                }
+                                                                encontrar = sc.nextInt();
+                                                                sc.nextLine();
+                                                                if (encontrar < 0 || encontrar > pasajeros.size()){
+                                                                    throw new DatosInvalidosException();
+                                                                }
+                                                                encontrado = pasajeros.get(encontrar-1);
+                                                                eleguida.setPasajero_id(ConexionPasajero.obtenerId(encontrado.getDni()));
+                                                                gestorReservas.guardar(eleguida);
+                                                                break;
+                                                            case 4:
+                                                                gestorReservas.eliminar(eleguida.getId());
+                                                                regresarReserva = true;
+                                                                break;
+                                                            case 5:
+                                                                regresarReserva = true;
+                                                                break;
+                                                            default:
+                                                                throw new DatosInvalidosException();
+                                                        }
+                                                    }
+                                                    break;
+                                                case 3:
+                                                    regresarHabitacion=true;
+                                                    break;
+                                                default:
+                                                    throw new DatosInvalidosException();
+                                            }
                                         }
 
                                         break;
@@ -186,6 +312,9 @@ public class Main {
                                 System.out.println("2: Buscar usuario");// por nombre. se listan los resultados y una vez selecionado se daran mas opciones
                                 System.out.println("3: Crear nueva habitacion");
                                 // despues mismas opciones que conserje, pero con un par mas de opciones en los menus despues de selccionar, como borrar pasajero o habitacion
+                                System.out.println("4: Aniadir nuevo pasajero");
+                                System.out.println("5: Buscar pasajero por nombre"); // se listan los resultados y una vez selecionado se daran mas opciones:
+                                System.out.println("6: Buscar habitacion por numero"); // muestra la habitacion, y se daran mas opciones
                                 System.out.println("9: Cerrar");
                                 choice = sc.nextInt();
                                 sc.nextLine();
@@ -335,6 +464,14 @@ public class Main {
                                             System.out.println("No se pudo crear la habitacion");
                                         }
                                         break;
+
+
+
+
+
+
+
+
                                     case 9:
                                         end = true;
                                         break;
