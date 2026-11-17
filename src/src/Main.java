@@ -456,7 +456,6 @@ public class Main {
 
                                         Habitacion nuevaHabitacion = new Habitacion(numHabitacion, precioXDia);
                                         if(gestorHabitaciones.guardar(nuevaHabitacion)){
-                                            gestorHabitaciones.listarDisponibles();
                                             System.out.println("Se creo correctamente la habitacion numero "
                                                     + nuevaHabitacion.getNumeroHabitacion() + " con el precio por dia establecido en: " + nuevaHabitacion.getPrecioPorDia());
                                         } else{

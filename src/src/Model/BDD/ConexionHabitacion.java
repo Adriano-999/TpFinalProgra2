@@ -141,7 +141,7 @@ public class ConexionHabitacion {
             Conexion.cerrar();
             return true;
         } catch (SQLException e) {
-            throw new PersistenciaException(e.getMessage());
+            throw new PersistenciaException(3);
         }
     }
 
