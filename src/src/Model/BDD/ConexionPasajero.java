@@ -9,7 +9,6 @@ import java.util.HashSet;
 import Exception.PersistenciaException;
 import Exception.LibreriaException;
 import Exception.NoEncontradoException;
-import Model.Usuario;
 
 public class ConexionPasajero {
 
