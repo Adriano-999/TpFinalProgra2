@@ -117,9 +117,9 @@ public class ConexionHabitacion {
                 PreparedStatement prepSt = connection.prepareStatement(
                         "update habitaciones " +
                                 "set numero_habitacion = ? , " +
-                                "precio_por_dia = ? " +
-                                "habitacion_estado = '?' " +
-                                "motivo = '?' " +
+                                "precio_por_dia = ?, " +
+                                "habitacion_estado = ?, " +
+                                "motivo = ? " +
                                 "where id_habitacion=?;");
                 prepSt.setInt(1,habitacion.getNumeroHabitacion());
                 prepSt.setDouble(2,habitacion.getPrecioPorDia());
@@ -129,20 +129,19 @@ public class ConexionHabitacion {
                 prepSt.execute();
                 prepSt.close();
             }else{
-                Statement st = connection.createStatement();
-                st.execute(
-                        "INSERT INTO habitaciones (numero_habitacion, precio_por_dia, habitacion_estado, motivo) VALUES ("+
-                                habitacion.getNumeroHabitacion()+","+
-                                habitacion.getPrecioPorDia()+","+
-                                habitacion.getHabitacionEstado().name()+","+
-                                habitacion.getMotivo()+");"
-                );
-                st.close();
+                PreparedStatement ps = connection.prepareStatement("INSERT INTO habitaciones " +
+                "(numero_habitacion, precio_por_dia, habitacion_estado, motivo) VALUES (?,?,?,?);");
+                ps.setInt(1,habitacion.getNumeroHabitacion());
+                ps.setDouble(2,habitacion.getPrecioPorDia());
+                ps.setString(3,habitacion.getHabitacionEstado().name());
+                ps.setString(4,habitacion.getMotivo());
+                ps.execute();
+                ps.close();
             }
             Conexion.cerrar();
             return true;
         } catch (SQLException e) {
-            throw new PersistenciaException(3);
+            throw new PersistenciaException(e.getMessage());
         }
     }
 

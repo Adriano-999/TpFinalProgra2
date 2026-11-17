@@ -191,7 +191,7 @@ public class Main {
                                         while(!regresarHabitacion) {
                                             Habitacion encontrada = gestorHabitaciones.buscarHabitacionPorNumero(encontrarHabitacion);
                                             System.out.println(encontrada);
-                                            if (encontrada.getHabitacionEstado() == HabitacionEstado.FUERA_DE_SERVICIO){
+                                            if (encontrada.getHabitacionEstado() != HabitacionEstado.FUERA_DE_SERVICIO){
                                                 System.out.println("1: Asignar como fuera de servicio"); // Deja introducir un mensaje como motivo
                                             } else {
                                                 System.out.println("1: Asignar como disponible o ocupada");
@@ -202,7 +202,7 @@ public class Main {
                                             sc.nextLine();
                                             switch(opcion){
                                                 case 1:
-                                                    if (encontrada.getHabitacionEstado() == HabitacionEstado.FUERA_DE_SERVICIO){
+                                                    if (encontrada.getHabitacionEstado() != HabitacionEstado.FUERA_DE_SERVICIO){
                                                         System.out.println("Describir motivo del estado:");
                                                         String nuevoMotivo = sc.nextLine();
                                                         encontrada.setMotivo(nuevoMotivo);
@@ -623,7 +623,7 @@ public class Main {
                                         while(!regresarHabitacion) {
                                             Habitacion encontrada = gestorHabitaciones.buscarHabitacionPorNumero(encontrarHabitacion);
                                             System.out.println(encontrada);
-                                            if (encontrada.getHabitacionEstado() == HabitacionEstado.FUERA_DE_SERVICIO){
+                                            if (encontrada.getHabitacionEstado() != HabitacionEstado.FUERA_DE_SERVICIO){
                                                 System.out.println("1: Asignar como fuera de servicio"); // Deja introducir un mensaje como motivo
                                             } else {
                                                 System.out.println("1: Asignar como disponible o ocupada");
@@ -635,7 +635,7 @@ public class Main {
                                             sc.nextLine();
                                             switch(opcion){
                                                 case 1:
-                                                    if (encontrada.getHabitacionEstado() == HabitacionEstado.FUERA_DE_SERVICIO){
+                                                    if (encontrada.getHabitacionEstado() != HabitacionEstado.FUERA_DE_SERVICIO){
                                                         System.out.println("Describir motivo del estado:");
                                                         String nuevoMotivo = sc.nextLine();
                                                         encontrada.setMotivo(nuevoMotivo);
