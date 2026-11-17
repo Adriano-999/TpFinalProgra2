@@ -396,6 +396,7 @@ public class Main {
                                                     } else{
                                                         System.out.println("No se logro el cambio de usuario.");
                                                     }
+                                                    break;
                                                 case 3:
                                                     System.out.println("Elija el nuevo tipo de usuario: ");
                                                     System.out.println("1. Administrador");
@@ -420,10 +421,11 @@ public class Main {
                                                     } else{
                                                         System.out.println("No se logro realizar el cambio.");
                                                     }
+                                                    break;
                                                 case 4:
                                                     System.out.println("Confirme si desea eliminar al usuario: " + encontradoUser.getUsuario());
                                                     System.out.println("1. Confirmar");
-                                                    System.out.println("1. Cancelar");
+                                                    System.out.println("2. Cancelar");
                                                     int confirmar = sc.nextInt();
                                                     sc.nextLine();
                                                     if (confirmar == 1) {
