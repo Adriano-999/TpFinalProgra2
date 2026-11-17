@@ -4,6 +4,8 @@ CREATE DATABASE IF NOT EXISTS 2026_C7_Feliziani_Benitez_Raimondo_TP_Final_Progra
     COLLATE utf8mb4_0900_ai_ci;
 use 2026_C7_Feliziani_Benitez_Raimondo_TP_Final_Progra;
 
+-- Create tables de los check table de los conexion: --
+
 create table if not exists usuarios (
     id_usuario int auto_increment primary key not null ,
     usuario varchar(20) unique not null,
@@ -36,6 +38,8 @@ create table if not exists reservas (
     id_habitacion int,
     FOREIGN KEY (id_pasajero) REFERENCES pasajeros(id_pasajero) on delete cascade,
     FOREIGN KEY (id_habitacion) REFERENCES habitaciones(id_habitacion) on delete cascade);
+
+-- Inserts con valores predeterminados para pruebas: --
 
 INSERT INTO usuarios (usuario, contrasenia, tipo_usuario) VALUES
     ('juan', 'juan123', 'CONSERJE'),
